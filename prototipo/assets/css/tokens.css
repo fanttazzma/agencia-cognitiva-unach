@@ -1,0 +1,42 @@
+/* =========================================================
+   Tokens de diseño · Plataforma de Agencia Cognitiva UNACH
+   Única fuente de colores, tipografías y medidas.
+   Al migrar a React/Tailwind, estos valores pasan tal cual
+   a tailwind.config (theme.extend.colors / fontFamily).
+   ========================================================= */
+:root{
+  /* Azul institucional */
+  --ink:#0B1630;
+  --navy:#132652;
+  --navy-2:#1B3366;
+  --navy-3:#24427E;
+
+  /* Dorado del escudo */
+  --gold:#B8924A;
+  --gold-2:#D4BC8C;
+  --gold-3:#EADBB8;
+
+  /* Papel */
+  --paper:#F7F2E6;
+  --paper-2:#EFE7D3;
+
+  /* Estados */
+  --ok:#2E7D4F;
+  --warn:#A86A00;
+  --err:#C46553;
+
+  /* Texto y líneas */
+  --text-d:#C8CFDF;               /* texto sobre fondo oscuro */
+  --text-l:#3D4560;               /* texto sobre fondo claro */
+  --line-d:rgba(212,188,140,.18);
+  --line-l:rgba(19,38,82,.12);
+
+  /* Tipografía */
+  --serif:"Fraunces",Georgia,"Times New Roman",serif;
+  --sans:"Manrope",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+
+  /* Movimiento y espaciado */
+  --ease:cubic-bezier(.2,.7,.1,1);
+  --gut:clamp(16px,5vw,72px);
+  --radius:20px;
+}
