@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="es" class="no-js">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Asistente de IA · Agencia Cognitiva UNACH</title>
+<meta name="description" content="Opciones para integrar inteligencia artificial en la lectura asistida de la Plataforma de Agencia Cognitiva.">
+<meta name="theme-color" content="#0B1630">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<link rel="icon" href="assets/img/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..600&family=Manrope:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="assets/css/tokens.css">
+<link rel="stylesheet" href="assets/css/site.css">
+<script src="assets/js/site.js" defer></script>
+</head>
+<body class="portal">
+<a class="skip" href="#contenido">Saltar al contenido</a>
+<header class="nav solid" id="nav">
+  <div class="wrap">
+    <a href="index.html" class="brand" aria-label="Agencia Cognitiva, inicio">
+      <img src="assets/img/unach-logo-light-sm.png" alt="Escudo de la Benemérita Universidad Autónoma de Chiapas" width="44" height="40">
+      <span><b>Agencia Cognitiva</b><small>Benemérita UNACH</small></span>
+    </a>
+    <nav aria-label="Principal">
+      <ul id="menu">
+        <li><a href="index.html">Inicio</a></li>
+        <li><a href="modelo.html">Conoce el modelo</a></li>
+        <li><a href="ia.html" aria-current="page">Asistente de IA</a></li>
+      </ul>
+    </nav>
+    <button class="burger" id="burger" aria-label="Abrir menú" aria-expanded="false" aria-controls="menu"><i></i><i></i></button>
+  </div>
+</header>
+
+<main id="contenido">
+<section class="p-hero">
+  <div class="wrap">
+    <div class="eyebrow label">Propuesta para la Secretaría Académica</div>
+    <h1>Asistente de IA para la <em>lectura asistida</em></h1>
+    <p class="p-lead">Cómo apoyar a los docentes en la revisión de las cédulas sin quitarles la decisión, cuidando los datos de los estudiantes y cumpliendo los Lineamientos Éticos de IA de la Universidad.</p>
+  </div>
+</section>
+
+<section class="p-sec">
+  <div class="wrap">
+    <h2 class="p-title">Qué hace el asistente</h2>
+    <div class="p-cards">
+      <div class="p-card"><span class="p-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 3h7l4 4v14H7Z"/><path d="M10 12h5M10 16h5"/></svg></span><div><h3>Resume la entrega</h3><p>Al recibir cada etapa, prepara un resumen para que el docente lea más rápido.</p></div></div>
+      <div class="p-card"><span class="p-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span><div><h3>Lista de revisión</h3><p>Señala si se respondieron las preguntas, si se justificaron los descartes y si hay incongruencias.</p></div></div>
+      <div class="p-card"><span class="p-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.6"/><path d="M5 20c0-3.6 3.1-6 7-6s7 2.4 7 6"/></svg></span><div><h3>No califica</h3><p>Es una sugerencia. La retroalimentación y la decisión son siempre del docente (Lineamientos, art. 7).</p></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="p-sec p-sec-alt">
+  <div class="wrap">
+    <h2 class="p-title">Opciones de implementación</h2>
+    <p class="p-intro">Las tres guardan el análisis en la plataforma salvo la tercera. La plataforma se construye para cambiar de opción con solo modificar la configuración.</p>
+    <div class="ia-opts">
+      <article class="panel ia-opt rec">
+        <span class="tag now">Recomendada para iniciar</span>
+        <h3>1. Modelo de IA propio en servidores de la UNACH</h3>
+        <p>Un modelo abierto (por ejemplo Gemma de Google, Llama o Qwen) instalado en un servidor de la Universidad con tarjeta gráfica.</p>
+        <ul class="ia-l"><li class="y">Los textos de los estudiantes no salen de la Universidad</li><li class="y">Sin costo por uso; solo el equipo</li><li class="y">Todo queda registrado en la plataforma</li><li class="n">Requiere un servidor con GPU y mantenimiento</li><li class="n">Un poco menos preciso que los modelos comerciales más grandes</li></ul>
+      </article>
+      <article class="panel ia-opt">
+        <span class="tag done">Opción institucional</span>
+        <h3>2. Gemini por API (Google Cloud de la UNACH)</h3>
+        <p>La plataforma llama a Gemini con una cuenta institucional de Google Cloud, aprovechando el convenio existente con Google.</p>
+        <ul class="ia-l"><li class="y">Alta calidad de análisis</li><li class="y">Integrado: el resultado se guarda en la plataforma</li><li class="y">Sin servidor propio de IA</li><li class="n">Costo por uso: hay que presupuestarlo o negociarlo en el convenio</li><li class="n">Los textos se procesan en Google (con datos sin nombres ni matrículas)</li></ul>
+      </article>
+      <article class="panel ia-opt">
+        <span class="tag done">Alternativa sin costo</span>
+        <h3>3. Gemini de cada docente (cuenta @unach.mx)</h3>
+        <p>Un botón prepara la entrega sin datos personales y abre el Gemini del docente; él pega y lee el análisis.</p>
+        <ul class="ia-l"><li class="y">Usa las licencias que ya paga la Universidad</li><li class="y">Sin infraestructura nueva</li><li class="n">Paso manual de copiar y pegar</li><li class="n">El análisis no queda registrado en la plataforma</li></ul>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="p-sec">
+  <div class="wrap">
+    <div class="cal-grid">
+      <div>
+        <h2 class="p-title">Cómo funciona (opciones 1 y 2)</h2>
+        <ol class="p-rules ia-flow">
+          <li><h3>El estudiante entrega una etapa</h3><p>La plataforma guarda su cédula.</p></li>
+          <li><h3>Se quitan los datos personales</h3><p>Nombre, matrícula y nombres de personas entrevistadas se reemplazan antes del análisis.</p></li>
+          <li><h3>El asistente analiza en segundo plano</h3><p>Una sola vez por entrega, en una fila de espera, sin afectar a los usuarios.</p></li>
+          <li><h3>El docente revisa y decide</h3><p>Ve el análisis guardado junto a la entrega y escribe su retroalimentación.</p></li>
+        </ol>
+      </div>
+      <div>
+        <h2 class="p-title">Cumplimiento</h2>
+        <div class="panel"><ul class="news">
+          <li><div class="k"><span>Art. 7 · Supervisión humana</span></div><p>El asistente sugiere; el docente decide y retroalimenta.</p></li>
+          <li><div class="k"><span>Art. 10 · Protección de datos</span></div><p>Datos personales retirados antes del análisis; con la opción 1 no salen de la Universidad.</p></li>
+          <li><div class="k"><span>Art. 33 · Derecho a saber</span></div><p>El estudiante es informado de que su docente puede apoyarse en el asistente y puede pedir revisión humana.</p></li>
+          <li><div class="k"><span>Arts. 6, 27 y 28 · Gestión de riesgos</span></div><p>Iniciar como proyecto piloto en pocos grupos y solicitar el dictamen del CCAIA.</p></li>
+        </ul></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="p-sec p-sec-alt">
+  <div class="wrap">
+    <h2 class="p-title">Lo que se necesita decidir</h2>
+    <ol class="p-rules">
+      <li><h3>Opción preferida</h3><p>Modelo propio, Gemini institucional o una combinación (piloto local y después Gemini).</p></li>
+      <li><h3>Convenio con Google</h3><p>Consultar si el convenio incluye uso de la API de Gemini o créditos de Google Cloud para la Universidad.</p></li>
+      <li><h3>Infraestructura</h3><p>Disponibilidad de un servidor con GPU en la Universidad para el modelo propio.</p></li>
+    </ol>
+  </div>
+</section>
+</main>
+
+<footer id="ayuda">
+  <div class="wrap">
+    <div class="legal">
+      <span>Benemérita Universidad Autónoma de Chiapas · Propuesta del equipo de desarrollo</span>
+      <span>Prototipo v3 · 2026</span>
+    </div>
+  </div>
+</footer>
+</body>
+</html>
