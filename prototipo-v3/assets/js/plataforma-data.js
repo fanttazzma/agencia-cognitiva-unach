@@ -39,7 +39,7 @@ window.AC = {
     },
   },
 
-  estudiante: { nombre: 'Ana Pérez Gómez', iniciales: 'AP', programa: 'Ingeniería en Desarrollo de Software', semestre: 5, matricula: 'A220145' },
+  estudiante: { nombre: 'Ana Pérez Gómez', iniciales: 'AP', programa: 'Ingeniería en Desarrollo y Tecnologías de Software', unidad: 'Escuela de Tecnologías Digitales Aplicadas C-I', semestre: 5, matricula: 'A220145' },
   docente: { nombre: 'Mtro. Carlos Ruiz Hernández', iniciales: 'CR' },
   autoridad: { nombre: 'Secretaría Académica', iniciales: 'SA' },
 
@@ -98,8 +98,17 @@ window.AC = {
     docente: 'Mtro. Carlos Ruiz Hernández',
     grupo: '5A',
     criteriosIA: 'Puedes usar IA para explorar alternativas de modelado y consultas. No para redactar tus respuestas ni la conclusión. Registra cada uso en tu bitácora.',
-    ejes: { 'Sustentabilidad': 'Reducir el uso de papel en listas de asistencia y dimensionar el servidor para no desperdiciar energía.' },
-    andamiaje: ['Modelo entidad-relación y normalización (texto guía de la unidad)', 'Documentación oficial de PostgreSQL: índices y transacciones', 'Lineamientos de seguridad de los sistemas informáticos de la UNACH'],
+    ejes: {
+      'Interculturalidad': { aplica: true, texto: 'Ofrecer la interfaz del registro también en tsotsil y tseltal para el personal y estudiantes hablantes.' },
+      'Sustentabilidad': { aplica: true, texto: 'Reducir el uso de papel en listas de asistencia y dimensionar el servidor para no desperdiciar energía.' },
+      'Cultura de paz': { aplica: false, texto: 'El reto es técnico y no involucra procesos de convivencia; se valorará el trato respetuoso en el trabajo en equipo.' },
+    },
+    // Fuentes obligatorias (andamiaje): de preferencia enlaces; título y autor opcionales
+    andamiaje: [
+      { tipo: 'doc', titulo: 'Texto guía de la unidad: modelo entidad-relación y normalización', autor: 'Academia de Bases de Datos', archivo: 'texto-guia-unidad-2.pdf' },
+      { tipo: 'link', titulo: '', autor: '', url: 'https://www.postgresql.org/docs/current/indexes.html' },
+      { tipo: 'norma', titulo: 'Lineamientos de seguridad para los sistemas informáticos y de comunicaciones', autor: 'UNACH', url: 'https://www.unach.mx/images/documentos/legislacion/LINEAMIENTOS-DE-SEGURIDAD.pdf' },
+    ],
     compartido: [['5.3 Calidad de los Procesos', 'Mtra. Laura Gómez Ruiz'], ['5.6 Taller de Desarrollo', 'Ing. Pablo Torres Díaz']],
     guia: {
       proposito: 'Diseñar y justificar un modelo de datos que soporte alta concurrencia, aplicando normalización, índices y particionamiento.',
@@ -126,6 +135,11 @@ window.AC = {
     bitacora: [
       { tipo: 'IA', herr: 'Gemini (cuenta institucional)', a: 'Propón un modelo entidad-relación para registrar accesos con credencial QR en una universidad.', b: 'Sugirió las tablas persona, credencial, acceso y puerta, con una relación muchos a muchos entre persona y puerta.' },
       { tipo: 'Humano', herr: 'Personal de control escolar', a: 'Entrevista sobre cómo se registra hoy la asistencia.', b: 'Muchos estudiantes olvidan la credencial; necesitan un respaldo con la aplicación institucional.', consent: true },
+    ],
+    fuentesBase: [
+      'Con el texto guía normalicé el modelo hasta tercera forma normal y separé persona de credencial.',
+      'De la documentación de PostgreSQL tomé el uso de índices compuestos para las consultas por fecha.',
+      'Los lineamientos de seguridad me hicieron limitar quién puede consultar los registros de acceso.',
     ],
     propuesta: 'Una tabla única de accesos con la matrícula como llave y una aplicación móvil para escanear.',
     fuentes: ['Documentación de PostgreSQL sobre particionamiento de tablas', ''],
@@ -190,6 +204,7 @@ window.AC = {
     ['Facultad de Ciencias Agronómicas', 79, 72, { I: 33, S: 61, P: 8 }],
     ['Facultad de Humanidades C-VI', 77, 69, { I: 49, S: 18, P: 37 }],
     ['Escuela de Ciencias Químicas', 74, 66, { I: 6, S: 39, P: 5 }],
+    ['Escuela de Tecnologías Digitales Aplicadas C-I', 72, 64, { I: 11, S: 26, P: 7 }],
     ['Facultad de Derecho C-III', 71, 60, { I: 28, S: 7, P: 44 }],
     ['Facultad de Ciencias Sociales C-III', 69, 63, { I: 38, S: 21, P: 30 }],
     ['Facultad de Lenguas Tuxtla', 66, 58, { I: 52, S: 6, P: 17 }],
@@ -198,11 +213,10 @@ window.AC = {
   ],
   totalUnidades: 44,
   miUnidad: 'Facultad de Ingeniería',
+  // Programas de ejemplo: la lista real llegará de la API institucional
   programas: [
-    ['Ingeniería en Desarrollo de Software', 'Plan 2026', 87, 79],
-    ['Ingeniería Civil', 'Plan 2015', 81, 72],
     ['Ingeniería Civil', 'Plan 2026', 85, 77],
-    ['Ingeniería en Ciencia de Datos', 'Plan 2026', 83, 75],
+    ['Ingeniería Civil', 'Plan 2015', 81, 72],
   ],
   actividadDocente: { activos: 112, total: 131, sinRetos: 9, reportes: 9, accesosSemana: 1840 },
 };

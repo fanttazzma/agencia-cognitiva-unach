@@ -433,3 +433,26 @@ main,.page{min-width:0}
 .tip::after{display:none;transition:none}
 .tip:hover::after,.tip:focus::after{display:block}
 @media (max-width:560px){.tip::after{left:auto;right:-8px;transform:none;width:min(260px,72vw)}}
+/* Ejes: aplica / no aplica */
+.eje-h{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.eje-h .seg{margin-left:auto}
+.eje.na{border-color:var(--line-l);background:#FAF9F6}
+.axes > div.na{background:#FAF9F6}
+
+/* Fuentes del andamiaje */
+.fuentes{margin:0;padding-left:18px;display:grid;gap:8px}
+.fuente{display:inline-flex;align-items:flex-start;gap:8px}
+.fuente .ic{margin-top:3px;color:var(--gold)}
+.fuente a{color:var(--navy);font-weight:600;text-underline-offset:3px}
+.fuente small{display:block;font-weight:400;color:var(--text-l);font-size:12px}
+.fb-src{margin-top:16px;font-size:13.5px}
+.fb-src + label.f{margin-top:6px}
+.fuente-row{display:grid;grid-template-columns:190px 1.4fr 1fr .8fr 36px;gap:8px;align-items:center;margin-top:8px}
+.fuente-row .wc{grid-column:2 / -1}
+.mini-file{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--navy);font-weight:600}
+@media (max-width:860px){.fuente-row{grid-template-columns:1fr 36px}.fuente-row > *:not(.xbtn){grid-column:1}.fuente-row .xbtn{grid-column:2;grid-row:1}}
+/* Momento del Modelo Académico bajo cada etapa */
+.mom{display:block;margin-top:4px;font:600 10.5px/1.3 var(--sans);letter-spacing:.06em;color:var(--gold)}
+.stage-row .nm{min-width:0}
+.step .mom{padding-right:10px;font-size:10px}
+.ph .mom{margin-top:8px}

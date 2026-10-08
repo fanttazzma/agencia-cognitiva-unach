@@ -8,6 +8,7 @@ Prototipo visual (Fase 0). No tiene backend: los datos son de ejemplo.
 - **Estudiante:** sin copiar ni pegar en sus retos; etapas que se abren solo tras la revisión; proyecto integrador que se llena una vez; conclusión con «¿cómo lo hiciste?» por eje; defensa oral; descarga de la cédula concluida en PDF con fecha y hora; avisos con enlace y «Agregar a Google Calendar»; guía con glosario, ejes, ejemplos y espacio para video.
 - **Autoridad:** top 10 de unidades académicas, lugar de la propia unidad, retos por eje, detalle por programa educativo y plan, actividad docente.
 - **Acceso:** botón de Google limitado a cuentas @unach.mx (simulado).
+- **Ajustes posteriores (8 de octubre):** ejes «Aplica / No aplica» con justificación y nota del Modelo Académico (los cuatro ejes son filtros obligatorios de validación); fuentes base del andamiaje en la etapa 1 y gestión de riesgos en la conclusión; fuentes obligatorias como enlaces (título y autor opcionales); actividades de aprendizaje de 1 a 3 según las cédulas disponibles; etiqueta del momento del Modelo Académico (1 a 6) en cada etapa y pantalla; unidades de ejemplo: estudiante y docente en la Escuela de Tecnologías Digitales Aplicadas C-I, autoridad en la Facultad de Ingeniería.
 - **ia.html:** propuesta de opciones de IA para la Secretaría Académica.
 
 ## Estructura
