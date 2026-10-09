@@ -77,6 +77,16 @@
   const momento = (i) => i === 0 ? 'Momento 2 · Construcción dialógica' : i === 1 ? 'Momento 3 · Curaduría crítica' : 'Momento 3 · Curaduría crítica (continuación)';
   const momTag = t => `<small class="mom" title="Momento del Modelo Académico al que corresponde">${esc(t)}</small>`;
 
+  /* ---------- Ejes transversales: ilustración y tarjetas ---------- */
+  const ILU = { 'Adopción crítica de la IA': 'ia', 'Interculturalidad': 'inter', 'Sustentabilidad': 'sust', 'Cultura de paz': 'paz' };
+  const ilu = k => `<svg class="ilu" viewBox="0 0 240 150" aria-hidden="true"><use href="assets/img/ejes.svg#ilu-${ILU[k]}"/></svg>`;
+  const MISS = '<span class="pv-miss">Sin capturar</span>';
+  // list: [eje, 'fija' | 'si' | 'no' | null, texto del docente]
+  const ejesGrid = list => `<div class="ejes-g">${list.map(([k, dec, txt]) => `<div class="eje-c ${dec === 'no' ? 'na' : ''}">${ilu(k)}<div>
+      <h4>${esc(k)} <span class="chip ${dec === 'no' || !dec ? '' : 'gold'}">${dec === 'fija' ? 'Siempre aplica' : dec === 'si' ? 'Aplica' : dec === 'no' ? 'No aplica' : 'Sin decidir'}</span></h4>
+      <span class="why">${dec === 'fija' ? 'Cómo se podrá usar la IA' : dec === 'no' ? 'Por qué no aplica' : 'Por qué aplica y qué incluye'}</span>
+      <p>${txt && String(txt).trim() ? esc(txt) : MISS}</p></div></div>`).join('')}</div>`;
+
   /* ---------- Fuentes del andamiaje ---------- */
   const TIPOS = { link: 'Enlace web', norma: 'Norma o documento oficial', doc: 'Documento del docente', libro: 'Libro de biblioteca' };
   const urlOk = u => /^https?:\/\/[^\s/$.?#][^\s]*\.[^\s]+$/i.test(String(u || '').trim());
@@ -89,6 +99,15 @@
     return `<span class="fuente">${icn}<span>${main}${meta ? `<small>${meta}</small>` : ''}</span></span>`;
   };
   const fuenteValida = f => f.tipo === 'doc' ? !!f.archivo : f.tipo === 'libro' ? !!((f.ref || '').trim() || (f.titulo || '').trim()) : urlOk(f.url);
+
+  function guiaReto(g) {
+    const v = x => x && String(x).trim() ? esc(x) : MISS;
+    const filas = [['Descripción', g.desc], ['Propósito', g.proposito], ['Producto esperado', g.producto], ['Organización', g.organizacion], ['Criterios de evaluación', g.criterios]].filter(([, x]) => x !== undefined);
+    return `<div class="ejes-chips"><span class="chip ink">Reto ${esc(g.tipoReto.toLowerCase())}</span></div>
+      <dl class="kv">${filas.map(([k, x]) => `<dt>${k}</dt><dd>${v(x)}</dd>`).join('')}
+        <dt>Fuentes obligatorias (andamiaje)</dt><dd>${g.fuentes.length ? `<ol class="fuentes">${g.fuentes.map(f => `<li>${fuenteHTML(f)}</li>`).join('')}</ol>` : MISS}</dd></dl>
+      <h4 class="pv-h">Ejes transversales · por qué aplican o no en este reto</h4>${ejesGrid(g.ejes)}`;
+  }
 
   /* ---------- Estado ---------- */
   const etapaN = (nombre, fecha, first) => ({ nombre, fecha, entregable: '', instrucciones: '', preguntas: first ? ['¿Qué entendiste del reto con tus propias palabras?', '¿Qué necesitas investigar para resolverlo?', '¿Qué harás en esta etapa?'] : ['¿Qué cambiaste a partir de la retroalimentación?'] });
@@ -273,10 +292,9 @@
       <div class="crumb"><button data-go="trayecto">Mi trayecto</button>${ic('right')}<button data-go="materia" data-arg="5.2">5.2 Tópicos Avanzados de Bases de Datos</button>${ic('right')}Cédula 1</div>
       <div class="ph"><div><h1>${esc(R.titulo)}</h1><p>Cédula de Rastro Intelectual · ${esc(R.tipo)} · ${esc(R.docente)}</p></div>
         <span class="saved">Guardado automáticamente</span></div>
-      <details class="card guide"><summary><span><span class="caps muted">Guía del reto</span><b>Propósito, producto esperado y criterios</b>${momTag('Momento 1 · Lanzamiento y andamiaje pedagógico')}</span>${ic('chev', 'sm')}</summary>
-        <div class="ejes-chips"><span class="chip ink">Reto ${esc(R.tipoReto.toLowerCase())}</span><span class="chip gold">Adopción crítica de la IA</span>${Object.entries(R.ejes).map(([k, e]) => `<span class="chip ${e.aplica ? 'gold' : ''}">${esc(k)}${e.aplica ? '' : ' · no aplica'}</span>`).join('')}</div>
-        <dl class="kv">${[['Propósito', R.guia.proposito], ['Producto esperado', R.guia.producto], ['Organización', R.guia.organizacion], ['Criterios', R.guia.criterios], ...Object.entries(R.ejes).map(([k, e]) => [k, (e.aplica ? '' : 'No aplica: ') + e.texto])].map(([k, v]) => `<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join('')}
-          <dt>Fuentes obligatorias (andamiaje)</dt><dd><ol class="fuentes">${R.andamiaje.map(f => `<li>${fuenteHTML(f)}</li>`).join('')}</ol></dd></dl>
+      <details class="card guide"><summary><span><span class="caps muted">Guía del reto</span><b>Propósito, criterios, fuentes y ejes</b>${momTag('Momento 1 · Lanzamiento y andamiaje pedagógico')}</span><span class="more"><span class="m-c">Ver guía completa</span><span class="m-o">Ocultar</span>${ic('chev', 'sm')}</span></summary>
+        ${guiaReto({ tipoReto: R.tipoReto, proposito: R.guia.proposito, producto: R.guia.producto, organizacion: R.guia.organizacion, criterios: R.guia.criterios, fuentes: R.andamiaje,
+          ejes: [['Adopción crítica de la IA', 'fija', R.criteriosIA], ...Object.entries(R.ejes).map(([k, e]) => [k, e.aplica ? 'si' : 'no', e.texto])] })}
         <p class="small muted" style="margin:12px 0 0">Proyecto integrador compartido con ${R.compartido.map(([m, d]) => `${esc(m)} (${esc(d)})`).join(' y ')}. <b>Lo llenas una sola vez:</b> tu avance se refleja en la cédula de cada materia.</p></details>
       <div class="stepper">${st}</div>
       <div class="ced-grid"><div>${body}
@@ -331,7 +349,7 @@
     return `<div class="locked">${ic('lock', 'lg')}<div><b>Se habilita cuando tu docente revise la etapa 2</b><div class="small">Así cada etapa tiene su tiempo: el aprendizaje necesita respirar. Entrega prevista: ${fmtL(D.etapas[2].entrega)}.</div></div></div>
       <div class="card" style="margin-top:14px;opacity:.75"><h3>Lo que registrarás en la conclusión</h3>
         <p class="small muted" style="margin:6px 0 0">Matriz de impacto: revisarás tu propuesta frente a los cuatro ejes, como pide el Modelo Académico.</p>
-        <div class="axes">${[['Adopción crítica de la IA', { aplica: true, texto: 'Explica cómo usaste la IA y cómo mantuviste tu propio juicio.' }], ...Object.entries(R.ejes)].map(([k, e]) => `<div class="${e.aplica ? '' : 'na'}"><h4>${esc(k)}${e.aplica ? '' : ' <span class="chip">No aplica</span>'}</h4><p class="small muted" style="margin:0">${e.aplica ? '¿Cómo lo hiciste? ' + esc(e.texto) : 'Justificación del docente: ' + esc(e.texto) + ' Si tu solución sí tuvo relación con este eje, puedes comentarlo.'}</p></div>`).join('')}</div>
+        <div class="axes">${[['Adopción crítica de la IA', { aplica: true, texto: 'Explica cómo usaste la IA y cómo mantuviste tu propio juicio.' }], ...Object.entries(R.ejes)].map(([k, e]) => `<div class="${e.aplica ? '' : 'na'}"><h4>${esc(k)}${e.aplica ? '' : ' <span class="chip">No aplica</span>'}</h4><p class="small muted" style="margin:0">${e.aplica ? (k === 'Adopción crítica de la IA' ? '¿Cómo lo hiciste? ' + esc(e.texto) : '<b>Por qué aplica (tu docente):</b> ' + esc(e.texto) + ' <b>¿Cómo lo hiciste?</b>') : '<b>Por qué no aplica (tu docente):</b> ' + esc(e.texto) + ' Si tu solución sí tuvo relación con este eje, puedes comentarlo.'}</p></div>`).join('')}</div>
         <ul class="small" style="margin:14px 0 0;padding-left:18px;line-height:1.8"><li><b>Gestión de riesgos y justificación:</b> si tu solución tiene un impacto no deseado en algún eje, reconócelo y explica por qué la mantuviste</li><li>Declaración de soberanía intelectual (declaración de uso de IA)</li><li>¿Qué aprendiste? En tus propias palabras</li><li>Al cerrar el reto se genera tu cédula en PDF con fecha y hora</li></ul></div>
       <div class="card"><div class="row" style="gap:14px;align-items:flex-start;flex-wrap:nowrap">${ic('mic', 'lg')}<div><h3>Defensa oral</h3>
         <p class="small" style="margin:6px 0 0">${fmtL(R.defensa.fecha)}, ${esc(R.defensa.hora)} h · ${esc(R.defensa.lugar)}</p>
@@ -363,17 +381,21 @@
     <div class="card"><div class="track">${D.semestres.map(s => `<div class="sem ${s.estado === 'now' ? 'now' : ''} ${s.estado === 'lock' ? 'lock' : ''}"><span class="n">${s.n}</span><small>${s.estado === 'done' ? 'Completado' : s.estado === 'now' ? 'En curso' : 'Pendiente'}</small></div>`).join('')}</div>
       <div class="locked" style="margin-top:16px">${ic('award', 'lg')}<div><b>Constancia bloqueada</b><div class="small">Faltan 4 semestres. Al desbloquearse podrás descargarla en PDF con folio de verificación.</div></div></div></div></div>`;
 
-  V.guia = () => `<div class="page"><div class="crumb">Ayuda</div><div class="ph"><div><h1>Guía de uso</h1><p>Cómo funciona la plataforma. La explicación completa del modelo está en <a href="modelo.html">Conoce el modelo</a>.</p></div></div>
+  const VOLVER = { est: ['trayecto', 'Mi trayecto', 'Volver a mi trayecto'], doc: ['doc-home', 'Panel docente', 'Volver al panel docente'], aut: ['aut-home', 'Indicadores', 'Volver a indicadores'] };
+  V.guia = () => `<div class="page"><div class="crumb"><button data-go="${VOLVER[S.role][0]}">${VOLVER[S.role][1]}</button>${ic('right')}Guía y glosario</div>
+    <div class="ph"><div><h1>Guía de uso y glosario</h1><p>Cómo funciona la plataforma. La explicación completa del modelo está en <a href="modelo.html">Conoce el modelo</a>.</p></div>
+      <button class="btn btn-o" data-go="${VOLVER[S.role][0]}">${ic('left', 'sm')}${VOLVER[S.role][2]}</button></div>
     <div class="card video"><div class="video-ph">${ic('play', 'lg')}<div><b>Video de bienvenida</b><p class="small muted" style="margin:4px 0 0">Recorrido de 3 minutos por la plataforma (se incrustará desde YouTube).</p></div></div></div>
     <div class="grid3" style="margin-top:14px">${[['1', 'Tu docente publica el reto', 'Indica si es un proyecto integrador o actividades de aprendizaje, y calendariza al menos dos etapas.'],
       ['2', 'Entregas por etapa', 'En cada etapa registras tu proceso. La siguiente se abre cuando tu docente revisa la anterior.'],
       ['3', 'Concluyes y defiendes', 'Cierras con lo que aprendiste, descargas tu cédula en PDF y la presentas en tu defensa oral.']]
-      .map(([n, t, d]) => `<div class="card"><span class="serif" style="font-size:34px;color:var(--gold);font-weight:300">${n}</span><h3 style="margin-top:6px">${t}</h3><p class="small muted" style="margin:6px 0 0">${d}</p></div>`).join('')}</div>
+      .map(([n, t, d]) => `<div class="card"><span class="serif" style="font-size:30px;color:var(--navy)">${n}</span><h3 style="margin-top:6px">${t}</h3><p class="small muted" style="margin:6px 0 0">${d}</p></div>`).join('')}</div>
     <div class="grid2" style="margin-top:14px">
       <div class="card"><h3>Glosario</h3><dl class="glos">${D.glosario.map(([t, d]) => `<dt>${esc(t)}</dt><dd>${esc(d)}</dd>`).join('')}</dl></div>
-      <div class="card"><h3>Ejes transversales</h3>${Object.entries(D.ejes).map(([k, v]) => `<div class="entry"><b class="small">${esc(k)}</b><p class="small" style="margin:6px 0 0">${esc(v.def)}</p><p class="small muted" style="margin:6px 0 0">${esc(v.ej)}</p></div>`).join('')}
-        <h3 style="margin-top:20px">Ejemplos de retos</h3>${D.ejemplosRetos.map(([t, a, d]) => `<div class="entry"><div class="row"><span class="chip gold">${esc(t)}</span><span class="small muted">${esc(a)}</span></div><p class="small" style="margin:8px 0 0">${esc(d)}</p></div>`).join('')}</div>
-    </div></div>`;
+      <div class="card glos-ejes"><h3>Ejes transversales</h3>${Object.entries(D.ejes).map(([k, v]) => `<div class="entry">${ilu(k)}<div><b class="small">${esc(k)}</b><p class="small" style="margin:6px 0 0">${esc(v.def)}</p><p class="small muted" style="margin:6px 0 0">${esc(v.ej)}</p></div></div>`).join('')}
+        <h3 style="margin-top:20px">Ejemplos de retos</h3>${D.ejemplosRetos.map(([t, a, d]) => `<div class="entry" style="display:block"><div class="row"><span class="chip gold">${esc(t)}</span><span class="small muted">${esc(a)}</span></div><p class="small" style="margin:8px 0 0">${esc(d)}</p></div>`).join('')}</div>
+    </div>
+    <div class="row" style="justify-content:flex-end;margin-top:16px"><button class="btn btn-p" data-go="${VOLVER[S.role][0]}">${ic('left', 'sm')}${VOLVER[S.role][2]}</button></div></div>`;
 
   /* =========================================================
      VISTAS · DOCENTE
@@ -470,12 +492,12 @@
     const otros = ['Interculturalidad', 'Sustentabilidad', 'Cultura de paz'];
     return `<div class="note navy" style="margin:4px 0 12px">${ic('info', 'sm')}<span><b>Modelo Académico (apartado 2.2.1.2):</b> los cuatro ejes son <b>filtros obligatorios de validación</b>; toda propuesta debe revisarse frente a los cuatro. Por eso cada eje debe marcarse como «Aplica» o «No aplica» con su justificación.</span></div>
       <div class="ejes">
-      <div class="eje on fixed"><label><input type="checkbox" checked disabled> <b>Adopción crítica de la IA</b> <span class="chip">Siempre aplica</span>${tip(D.ejes['Adopción crítica de la IA'].def + ' ' + D.ejes['Adopción crítica de la IA'].ej)}</label>
+      <div class="eje on fixed"><label class="eje-h">${ilu('Adopción crítica de la IA')}<input type="checkbox" checked disabled> <b>Adopción crítica de la IA</b> <span class="chip">Siempre aplica</span>${tip(D.ejes['Adopción crítica de la IA'].def + ' ' + D.ejes['Adopción crítica de la IA'].ej)}</label>
         ${nb('¿Cómo se podrá usar la IA en este reto?', 'ia', { area: true, req: true, largo: true, ph: 'Qué sí y qué no se permite; para qué puede servir la IA' })}</div>
-      ${otros.map(k => { const dec = it.ejesDec[k]; return `<div class="eje ${dec === 'si' ? 'on' : dec === 'no' ? 'na' : ''}"><div class="eje-h"><b>${k}</b>${tip(D.ejes[k].def + ' ' + D.ejes[k].ej)}
+      ${otros.map(k => { const dec = it.ejesDec[k]; return `<div class="eje ${dec === 'si' ? 'on' : dec === 'no' ? 'na' : ''}"><div class="eje-h">${ilu(k)}<b>${k}</b>${tip(D.ejes[k].def + ' ' + D.ejes[k].ej)}
           ${seg('ejeDec', [[k + '|si', 'Aplica'], [k + '|no', 'No aplica']], dec ? k + '|' + dec : '')}</div>
-        ${dec ? `<label class="f"><span class="req">${dec === 'si' ? `¿Qué incluye este reto de ${k.toLowerCase()}?` : `¿Por qué no aplica ${k.toLowerCase()} en este reto?`}</span><textarea class="in" data-eje="${k}" data-largo="1" rows="2" placeholder="${dec === 'si' ? `Qué aspecto de ${k.toLowerCase()} trabajará el estudiante` : 'Justifique brevemente, considerando el contexto del reto'}">${esc(it.ejes[k] || '')}</textarea>${wc(it.ejes[k] || '', true)}</label>
-          <p class="small muted" style="margin:6px 0 0">${dec === 'si' ? 'Al concluir, el estudiante responderá: «¿Cómo lo hiciste?»' : 'La justificación será visible para el estudiante y para las autoridades académicas.'}</p>` : '<p class="small muted" style="margin:8px 0 0">Seleccione si aplica o no aplica.</p>'}</div>`; }).join('')}
+        ${dec ? `<label class="f"><span class="req">${dec === 'si' ? `¿Por qué aplica ${k.toLowerCase()} y qué incluye este reto?` : `¿Por qué no aplica ${k.toLowerCase()} en este reto?`}</span><textarea class="in" data-eje="${k}" data-largo="1" rows="2" placeholder="${dec === 'si' ? `Por qué es pertinente y qué aspecto de ${k.toLowerCase()} trabajará el estudiante` : 'Justifique brevemente, considerando el contexto del reto'}">${esc(it.ejes[k] || '')}</textarea>${wc(it.ejes[k] || '', true)}</label>
+          <p class="small muted" style="margin:6px 0 0">${dec === 'si' ? 'El estudiante verá por qué aplica y, al concluir, responderá: «¿Cómo lo hiciste?»' : 'El estudiante verá por qué no aplica; también es visible para las autoridades académicas.'}</p>` : '<p class="small muted" style="margin:8px 0 0">Seleccione si aplica o no aplica.</p>'}</div>`; }).join('')}
       </div>`;
   }
 
@@ -558,16 +580,26 @@
 
   function previewHTML() {
     const it = IT(), N = S.nuevo, mat = D.materiasDocente.find(m => m.id === N.materia);
-    const v = (x, alt = 'Sin capturar') => x && String(x).trim() ? esc(x) : `<span class="muted">${alt}</span>`;
-    return `<div class="between"><span class="caps muted">Vista previa · así lo verá el estudiante</span><button class="xbtn" data-act="closeModal" aria-label="Cerrar">${ic('x', 'sm')}</button></div>
-      <h3 style="margin-top:10px">${v(it.titulo, 'Título del reto')}</h3>
-      <p class="small muted" style="margin:4px 0 0">${esc(matLabel(mat))} · ${esc(D.docente.nombre)} · ${N.modo === 'integrador' ? 'Proyecto integrador' : `Cédula ${N.act + 1} de ${N.numActs}`}</p>
-      <div class="ejes-chips"><span class="chip ink">Reto ${esc(it.tipoReto.toLowerCase())}</span><span class="chip gold">Adopción crítica de la IA</span>${Object.entries(it.ejesDec).map(([k, v]) => `<span class="chip ${v === 'si' ? 'gold' : ''}">${esc(k)}${v === 'no' ? ' · no aplica' : ''}</span>`).join('')}</div>
-      <dl class="kv" style="margin-top:12px"><dt>Descripción</dt><dd>${v(it.desc)}</dd><dt>Propósito</dt><dd>${v(it.proposito)}</dd><dt>Producto esperado</dt><dd>${v(it.producto)}</dd>
-        <dt>Organización</dt><dd>${it.organizacion === 'Equipo' ? `En equipos de ${esc(it.integrantes)}` : 'Individual'}</dd><dt>Criterios</dt><dd>${v(it.criterios)}</dd><dt>Fuentes</dt><dd>${it.fuentes.some(fuenteValida) ? `<ol class="fuentes">${it.fuentes.filter(fuenteValida).map(f => `<li>${fuenteHTML(f)}</li>`).join('')}</ol>` : v('')}</dd><dt>Uso de IA</dt><dd>${v(it.ia)}</dd>
-        ${['Interculturalidad', 'Sustentabilidad', 'Cultura de paz'].map(k => `<dt>${esc(k)}</dt><dd>${it.ejesDec[k] === 'no' ? '<b>No aplica:</b> ' : ''}${v(it.ejes[k], it.ejesDec[k] ? 'Sin capturar' : 'Sin decidir')}</dd>`).join('')}</dl>
-      <h4 class="pv-h">Etapas</h4><ol class="pv-st">${it.etapas.map((e, i) => `<li><b>${esc(e.nombre)}</b> · entrega ${fmtL(e.fecha)}${e.preguntas.filter(q => q.trim()).length ? `<ul>${e.preguntas.filter(q => q.trim()).map(q => `<li>${esc(q)}</li>`).join('')}</ul>` : ''}</li>`).join('')}
-        <li><b>Conclusión</b> · ¿Qué aprendiste?</li><li><b>Defensa oral</b> · ${fmtL(it.defensa.fecha)}${it.defensa.lugar ? ' · ' + esc(it.defensa.lugar) : ''}</li></ol>`;
+    const otros = ['Interculturalidad', 'Sustentabilidad', 'Cultura de paz'], fuentes = it.fuentes.filter(fuenteValida);
+    const g = { tipoReto: it.tipoReto, desc: it.desc, proposito: it.proposito, producto: it.producto, criterios: it.criterios, fuentes,
+      organizacion: it.organizacion === 'Equipo' ? `En equipos de ${it.integrantes || '?'} integrantes` : 'Individual',
+      ejes: [['Adopción crítica de la IA', 'fija', it.ia], ...otros.map(k => [k, it.ejesDec[k] || null, it.ejes[k]])] };
+    const faltan = [it.titulo, it.desc, it.proposito, it.producto, it.criterios, it.ia].filter(x => !String(x || '').trim()).length
+      + otros.filter(k => !it.ejesDec[k] || !String(it.ejes[k] || '').trim()).length + (fuentes.length ? 0 : 1);
+    const tipo = N.modo === 'integrador' ? 'Proyecto integrador' : N.numActs > 1 ? `Actividad de aprendizaje ${N.act + 1} de ${N.numActs}` : 'Actividad de aprendizaje';
+    return `<div class="pv-head"><div><span class="caps muted">Vista previa</span><br><b>Así lo verá el estudiante</b></div><button class="xbtn" data-act="closeModal" aria-label="Cerrar">${ic('x', 'sm')}</button></div>
+      <div class="pv-frame"><div class="pv-bar"><i></i><i></i><i></i><span>Agencia Cognitiva · vista del estudiante</span></div>
+        <div class="pv-body">
+          <div class="crumb"><span>Mi trayecto</span>${ic('right')}<span>${esc(matLabel(mat))}</span>${ic('right')}<span>${tipo}</span></div>
+          <div class="ph"><div><h1>${it.titulo.trim() ? esc(it.titulo) : '<span class="pv-miss">Título del reto</span>'}</h1><p>Cédula de Rastro Intelectual · ${tipo} · ${esc(D.docente.nombre)}</p></div></div>
+          <div class="card"><span class="caps muted">Guía del reto</span> ${momTag('Momento 1 · Lanzamiento y andamiaje pedagógico')}<div style="margin-top:10px">${guiaReto(g)}</div></div>
+          <div class="card"><h3>Etapas y fechas</h3><ol class="pv-steps">${it.etapas.map((e, i) => `<li><span class="num">${i + 1}</span><div><b>${esc(e.nombre)}</b> <span class="small muted">· entrega ${fmtL(e.fecha)}</span>${momTag(momento(i))}
+              ${e.preguntas.filter(q => q.trim()).length ? `<ul>${e.preguntas.filter(q => q.trim()).map(q => `<li>${esc(q)}</li>`).join('')}</ul>` : ''}</div></li>`).join('')}
+            <li><span class="num">${ic('award')}</span><div><b>Conclusión</b> <span class="small muted">· ¿Qué aprendiste? y ¿cómo trabajaste cada eje?</span>${momTag(MOM_CONC)}</div></li>
+            <li><span class="num">${ic('mic')}</span><div><b>Defensa oral</b> <span class="small muted">· ${it.defensa.fecha ? fmtL(it.defensa.fecha) : 'fecha por definir'}${it.defensa.lugar ? ' · ' + esc(it.defensa.lugar) : ''}</span></div></li></ol></div>
+        </div></div>
+      <div class="pv-foot">${faltan ? `<span class="chip warn">${ic('alert', 'sm')}Faltan ${faltan} campo${faltan === 1 ? '' : 's'} por capturar</span>` : `<span class="chip ok">${ic('check', 'sm')}Todo capturado</span>`}
+        <div class="row"><button class="btn btn-o" data-act="closeModal">Seguir editando</button><button class="btn btn-p" data-act="publishPv">Publicar</button></div></div>`;
   }
 
   V['doc-rev'] = () => {
@@ -639,11 +671,11 @@
       <div class="rank"><b>${mia + 1}°</b><span>de ${D.totalUnidades}</span></div><button class="btn btn-o btn-s" data-go="aut-unidad">Ver detalle ${ic('right', 'sm')}</button></div></div>
     <div class="card" style="margin-top:14px"><div class="between"><div><h3>Top 10 unidades académicas</h3><div class="sub">Ordenadas por entregas a tiempo de los estudiantes</div></div>
         <div class="row small"><span class="row" style="gap:6px"><i class="lg-sw navy"></i>Estudiantes</span><span class="row" style="gap:6px"><i class="lg-sw gold"></i>Docentes</span></div></div>
-      <div class="tbl"><table class="rank-t" style="margin-top:8px"><thead><tr><th>#</th><th>Unidad académica</th><th style="width:38%">Cumplimiento</th><th>Interculturalidad</th><th>Sustentabilidad</th><th>Cultura de paz</th></tr></thead><tbody>
-      ${top.map(([u, a, b, e], i) => `<tr class="${u === D.miUnidad ? 'me' : ''}"><td class="serif">${i + 1}</td><td><b>${esc(u)}</b></td>
+      <div class="tbl"><table class="rank-t" style="margin-top:8px"><thead><tr><th>#</th><th>Unidad académica</th><th>Cédulas</th><th style="width:32%">Cumplimiento</th><th>Interculturalidad</th><th>Sustentabilidad</th><th>Cultura de paz</th></tr></thead><tbody>
+      ${top.map(([u, a, b, e], i) => `<tr class="${u === D.miUnidad ? 'me' : ''}"><td class="serif">${i + 1}</td><td><b>${esc(u)}</b></td><td><b>${e.C.toLocaleString('es-MX')}</b></td>
         <td><span class="bar" style="display:block"><i style="width:${a}%"></i></span><span class="bar gold" style="display:block;margin-top:4px"><i style="width:${b}%"></i></span><span class="small muted">${a}% · ${b}%</span></td>
         <td>${e.I}</td><td>${e.S}</td><td>${e.P}</td></tr>`).join('')}</tbody></table></div>
-      <p class="small muted" style="margin:10px 0 0">Retos por eje: número de retos publicados que trabajan cada eje (la adopción crítica de la IA está en todos).</p></div>
+      <p class="small muted" style="margin:10px 0 0">Cédulas: total de cédulas del periodo en la unidad, sin importar el eje. Interculturalidad, sustentabilidad y cultura de paz: número de retos publicados que trabajan cada eje (la adopción crítica de la IA está en todos).</p></div>
   </div>`;
   };
   V['aut-unidad'] = () => {
@@ -656,14 +688,14 @@
     <div class="grid4">
       <div class="card kpi"><b>${u[1]}%</b><span>Etapas entregadas a tiempo</span></div>
       <div class="card kpi"><b>${u[2]}%</b><span>Revisiones docentes a tiempo</span></div>
-      <div class="card kpi"><b>${A.activos}/${A.total}</b><span>Docentes activos en la plataforma</span></div>
+      <div class="card kpi"><b>${u[3].C.toLocaleString('es-MX')}</b><span>Cédulas en el periodo (total)</span></div>
       <div class="card kpi"><b>${A.sinRetos}</b><span>Grupos sin retos publicados (reporte enviado)</span></div></div>
     <div class="grid2" style="margin-top:14px">
       <div class="card"><h3>Por programa educativo y plan</h3><div class="tbl"><table style="margin-top:8px"><thead><tr><th>Programa</th><th>Plan</th><th>Estudiantes</th><th>Docentes</th></tr></thead><tbody>
         ${u[0] === D.miUnidad ? D.programas.map(([p, pl, a, b]) => `<tr><td><b>${esc(p)}</b></td><td>${esc(pl)}</td><td>${a}%</td><td>${b}%</td></tr>`).join('') : '<tr><td colspan="4" class="muted">Los programas de esta unidad se cargarán desde la API institucional.</td></tr>'}</tbody></table></div></div>
       <div class="card"><h3>Retos por eje transversal</h3><div class="sub">Retos publicados en la unidad que trabajan cada eje</div>
         <div style="margin-top:12px">${[['Interculturalidad', u[3].I], ['Sustentabilidad', u[3].S], ['Cultura de paz', u[3].P]].map(([k, v]) => `<div class="hbar" style="grid-template-columns:140px 1fr 40px"><span>${k}</span><span class="bar gold"><i style="width:${v / mx * 100}%"></i></span><b class="small">${v}</b></div>`).join('')}</div>
-        <h3 style="margin-top:20px">Actividad docente</h3><dl class="kv" style="margin-top:8px"><dt>Accesos esta semana</dt><dd>${A.accesosSemana.toLocaleString('es-MX')}</dd><dt>Sin actividad</dt><dd>${A.total - A.activos} docentes</dd></dl></div>
+        <h3 style="margin-top:20px">Actividad docente</h3><dl class="kv" style="margin-top:8px"><dt>Docentes activos</dt><dd>${A.activos} de ${A.total}</dd><dt>Accesos esta semana</dt><dd>${A.accesosSemana.toLocaleString('es-MX')}</dd><dt>Sin actividad</dt><dd>${A.total - A.activos} docentes</dd></dl></div>
     </div>
     <div class="card"><h3>Avance por semestre</h3><div style="margin-top:10px">${[[1, 88], [2, 84], [3, 80], [4, 77], [5, 61], [6, 58], [7, 55], [8, 49]].map(([s, v]) => `<div class="hbar" style="grid-template-columns:90px 1fr 44px"><span>Semestre ${s}</span><span class="bar"><i style="width:${v}%"></i></span><b class="small">${v}%</b></div>`).join('')}</div>
       <div class="note" style="margin-top:14px">${ic('alert', 'sm')}<span>Cifras de ejemplo. El sistema mide el cumplimiento del proceso; el aprendizaje lo valoran docentes y academias.</span></div></div>
@@ -741,7 +773,8 @@
     inviteAns: a => { const [i, r] = a.split(':'); const v = D.invitaciones.filter(x => x.estado === 'pendiente')[+i]; if (!v) return; v.estado = r; render(); toast(r === 'aceptada' ? 'Invitación aceptada: el proyecto aparece en sus retos' : 'Invitación rechazada'); },
     revGo: a => { if (a !== '') { S.reviewing = +a; render(); } },
     draft: () => toast('Borrador guardado'),
-    preview: () => modal(previewHTML(), 'wide'),
+    preview: () => modal(previewHTML(), 'pv'),
+    publishPv: () => { closeModal(); ACT.publish(); },
     publish: () => {
       const N = S.nuevo, items = N.modo === 'integrador' ? N.integr : N.acts.slice(0, N.numActs), m = [];
       items.forEach((it, k) => {
@@ -750,7 +783,7 @@
         [['desc', 'Descripción'], ['proposito', 'Propósito de aprendizaje'], ['producto', 'Producto esperado'], ['criterios', 'Criterios de evaluación'], ['ia', 'Uso de la IA']]
           .forEach(([f, t]) => { const v = it[f]; if (!String(v).trim()) m.push(`${pre}${t}`); else if (palabras(v) < D.minPalabras || sinSentido(v)) m.push(`${pre}${t}: mínimo ${D.minPalabras} palabras con sentido`); });
         it.fuentes.forEach((f, i) => { if (!fuenteValida(f)) m.push(`${pre}Fuente ${i + 1}: ${f.tipo === 'doc' ? 'suba el archivo' : f.tipo === 'libro' ? 'escriba la referencia del libro' : 'escriba un enlace válido (https://…)'}`); });
-        ['Interculturalidad', 'Sustentabilidad', 'Cultura de paz'].forEach(e => { const dec = it.ejesDec[e], v = it.ejes[e] || ''; if (!dec) m.push(`${pre}${e}: indique si aplica o no aplica`); else if (palabras(v) < D.minPalabras || sinSentido(v)) m.push(`${pre}${e}: ${dec === 'si' ? 'describa qué incluye' : 'justifique por qué no aplica'} (mínimo ${D.minPalabras} palabras)`); });
+        ['Interculturalidad', 'Sustentabilidad', 'Cultura de paz'].forEach(e => { const dec = it.ejesDec[e], v = it.ejes[e] || ''; if (!dec) m.push(`${pre}${e}: indique si aplica o no aplica`); else if (palabras(v) < D.minPalabras || sinSentido(v)) m.push(`${pre}${e}: ${dec === 'si' ? 'explique por qué aplica y qué incluye' : 'justifique por qué no aplica'} (mínimo ${D.minPalabras} palabras)`); });
         it.etapas.forEach((e, i) => { if (e.preguntas.filter(q => q.trim()).length < minPreg(i)) m.push(`${pre}Etapa ${i + 1}: mínimo ${minPreg(i)} pregunta${minPreg(i) > 1 ? 's' : ''}`); });
         if (!it.defensa.lugar.trim()) m.push(pre + 'Lugar de la defensa oral');
       });
