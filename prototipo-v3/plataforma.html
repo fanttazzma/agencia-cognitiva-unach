@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Plataforma · Agencia Cognitiva UNACH</title>
+<meta name="theme-color" content="#0B1630">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<link rel="icon" href="assets/img/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400..800;1,500&family=Lato:wght@400;700;900&display=swap">
+<link rel="stylesheet" href="assets/css/tokens.css?v=20261009">
+<link rel="stylesheet" href="assets/css/plataforma.css?v=20261009">
+<script src="assets/js/plataforma-data.js?v=20261009" defer></script>
+<script src="assets/js/plataforma.js?v=20261009" defer></script>
+</head>
+<body>
+
+<!-- ================= ACCESO ================= -->
+<section id="login" class="login">
+  <div class="login-side">
+    <svg class="topo" data-topo="620,420,18,2.1" viewBox="0 0 1000 800" preserveAspectRatio="xMidYMid slice" aria-hidden="true"></svg>
+    <a class="brand" href="index.html"><img src="assets/img/unach-logo-light-sm.png" alt="Escudo UNACH" width="48" height="43"><span><b>Agencia Cognitiva</b><small>Benemérita UNACH</small></span></a>
+    <div>
+      <h1>Por la conciencia de la <em>necesidad de servir.</em></h1>
+      <p>Registra el proceso de cada reto, recibe retroalimentación de tu docente y acumula tu avance semestre a semestre hasta obtener tu constancia.</p>
+    </div>
+    <p class="foot">Modelo Académico Visión 2050 · Prototipo con datos de ejemplo</p>
+  </div>
+  <div class="login-card">
+    <h2>Iniciar sesión</h2>
+    <p>Cuenta institucional de Google <b>@unach.mx</b></p>
+    <div class="roles" role="group" aria-label="Perfil para la demostración">
+      <button class="role-opt" data-role="est" aria-pressed="true"><span class="ri" data-icon="user"></span><span><b>Estudiante</b><span>Registra tus cédulas y consulta tu trayecto</span></span><span class="rad" aria-hidden="true"></span></button>
+      <button class="role-opt" data-role="doc" aria-pressed="false"><span class="ri" data-icon="board"></span><span><b>Docente</b><span>Publica retos, calendariza etapas y retroalimenta</span></span><span class="rad" aria-hidden="true"></span></button>
+      <button class="role-opt" data-role="aut" aria-pressed="false"><span class="ri" data-icon="chart"></span><span><b>Autoridad académica</b><span>Consulta indicadores de cumplimiento</span></span><span class="rad" aria-hidden="true"></span></button>
+    </div>
+    <button class="btn btn-p google" id="btnLogin">Continuar con Google (@unach.mx)</button>
+    <p class="legal">Solo se aceptan cuentas institucionales @unach.mx. El perfil se asigna automáticamente según tu cuenta; la selección es solo para la demostración. <a href="index.html#privacidad">Aviso de privacidad</a></p>
+  </div>
+</section>
+
+<!-- ================= APLICACIÓN ================= -->
+<div id="app" class="hidden">
+  <header class="top">
+    <button class="ibtn side-toggle" data-act="toggleSide" aria-label="Mostrar trayecto"><span data-icon="menu"></span></button>
+    <a class="brand" href="index.html" aria-label="Ir al portal"><img src="assets/img/unach-logo-light-sm.png" alt="" width="38" height="34"><span><b>Agencia Cognitiva</b><small>Benemérita UNACH</small></span></a>
+    <div class="ctx"><b id="ctxTitle">Ingeniería en Desarrollo de Software</b><span id="ctxSub">Periodo 2026-2 · Quinto semestre</span></div>
+    <div class="sp"></div>
+    <button class="ibtn" data-act="notif" aria-label="Avisos"><span data-icon="bell"></span><span class="dotn" id="notifCount">2</span></button>
+    <button class="ibtn" data-go="guia" aria-label="Ayuda"><span data-icon="help"></span></button>
+    <div class="who"><div class="av" id="userAv">AP</div><div class="nm"><b id="userName">Ana Pérez Gómez</b><span id="userRole">Estudiante</span></div></div>
+    <button class="linkout" data-act="logout">Salir</button>
+  </header>
+  <div class="shell">
+    <aside class="side" id="side" aria-label="Navegación"></aside>
+    <main id="view" tabindex="-1"></main>
+  </div>
+</div>
+
+<div class="flag">PROTOTIPO · DATOS DE EJEMPLO</div>
+<div id="modalRoot"></div>
+</body>
+</html>

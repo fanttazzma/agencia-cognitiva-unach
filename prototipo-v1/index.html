@@ -1,0 +1,727 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Agencia Cognitiva UNACH · Prototipo</title>
+<link rel="icon" href="assets/img/favicon.png">
+<style>
+:root{
+  --navy-950:#0B1630; --navy-900:#0E1D40; --navy:#132652; --navy-700:#1F3A73; --navy-100:#E6EBF5;
+  --gold:#B8924A; --gold-400:#D4BC8C; --gold-100:#F6EEDB; --cream:#FCF9E6;
+  --ink:#1B1F2A; --muted:#5D6475; --line:#DDE1EA; --bg:#F5F6F9; --white:#fff;
+  --ok:#2E7D4F; --ok-bg:#E5F4EA; --warn:#A86A00; --warn-bg:#FFF3D6; --bad:#B23A3A; --bad-bg:#FBE7E7;
+  --radius:12px; --shadow:0 1px 2px rgba(14,29,64,.06),0 4px 16px rgba(14,29,64,.06);
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{font-family:"Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif;color:var(--ink);background:var(--bg);font-size:15px;line-height:1.5}
+h1,h2,h3,h4{margin:0;line-height:1.25;color:var(--navy-900)}
+h1{font-size:24px} h2{font-size:20px} h3{font-size:16px} h4{font-size:14px}
+p{margin:0}
+button{font:inherit;cursor:pointer}
+input,textarea,select{font:inherit;color:inherit}
+.hidden{display:none!important}
+
+/* ---------- Layout ---------- */
+.topbar{position:sticky;top:0;z-index:20;background:var(--navy-900);color:#fff;display:flex;align-items:center;gap:16px;padding:0 20px;height:60px;border-bottom:3px solid var(--gold)}
+.brand{display:flex;align-items:center;gap:10px;font-weight:700;letter-spacing:.2px}
+.seal-img{width:46px;height:auto;display:block;filter:drop-shadow(0 2px 6px rgba(0,0,0,.35))}
+.seal{width:36px;height:36px;border-radius:50%;background:var(--gold);color:var(--navy-900);display:grid;place-items:center;font-weight:800;font-size:13px;border:2px solid var(--gold-400)}
+.brand small{display:block;font-weight:400;color:var(--gold-400);font-size:11px;letter-spacing:.6px;text-transform:uppercase}
+.topbar .spacer{flex:1}
+.user-chip{display:flex;align-items:center;gap:10px;font-size:13px}
+.avatar{width:32px;height:32px;border-radius:50%;background:var(--navy-700);display:grid;place-items:center;font-weight:700;border:2px solid var(--gold-400)}
+.role-tag{background:var(--gold);color:var(--navy-900);font-weight:700;font-size:11px;padding:2px 8px;border-radius:99px;text-transform:uppercase;letter-spacing:.4px}
+.link-btn{background:none;border:0;color:var(--gold-400);font-size:13px;text-decoration:underline}
+
+.shell{display:grid;grid-template-columns:240px 1fr;min-height:calc(100vh - 60px)}
+.sidebar{background:var(--white);border-right:1px solid var(--line);padding:18px 12px}
+.sidebar .sec{font-size:11px;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);margin:14px 10px 6px}
+.nav-item{display:flex;align-items:center;gap:10px;width:100%;text-align:left;background:none;border:0;padding:9px 12px;border-radius:8px;color:var(--ink)}
+.nav-item:hover{background:var(--navy-100)}
+.nav-item.active{background:var(--navy);color:#fff}
+.nav-item .ico{width:18px;text-align:center}
+main{padding:28px;max-width:1280px;width:100%;min-width:0}
+.ced-layout > *,.split > *{min-width:0}
+
+/* ---------- Componentes ---------- */
+.card{background:var(--white);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:20px}
+.card + .card{margin-top:16px}
+.muted{color:var(--muted)}
+.small{font-size:13px}
+.eyebrow{font-size:12px;text-transform:uppercase;letter-spacing:1px;color:var(--gold);font-weight:700}
+.btn{display:inline-flex;align-items:center;gap:8px;border-radius:8px;padding:9px 16px;border:1px solid transparent;font-weight:600;font-size:14px}
+.btn-primary{background:var(--navy);color:#fff}
+.btn-primary:hover{background:var(--navy-700)}
+.btn-gold{background:var(--gold);color:var(--navy-950)}
+.btn-gold:hover{background:var(--gold-400)}
+.btn-ghost{background:var(--white);border-color:var(--line);color:var(--navy)}
+.btn-ghost:hover{border-color:var(--navy)}
+.btn-sm{padding:5px 10px;font-size:12px}
+.badge{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:600;padding:2px 9px;border-radius:99px;white-space:nowrap}
+.b-ok{background:var(--ok-bg);color:var(--ok)} .b-warn{background:var(--warn-bg);color:var(--warn)} .b-bad{background:var(--bad-bg);color:var(--bad)}
+.b-navy{background:var(--navy-100);color:var(--navy)} .b-gold{background:var(--gold-100);color:#7A5B1E}
+.row{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.page-head{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;margin-bottom:20px;flex-wrap:wrap}
+.page-head p{margin-top:4px}
+label.field{display:block;margin-top:14px}
+label.field > span{display:block;font-weight:600;font-size:13px;color:var(--navy-900);margin-bottom:5px}
+label.field > span em{font-style:normal;color:var(--muted);font-weight:400}
+.input,textarea.input,select.input{width:100%;border:1px solid var(--line);border-radius:8px;padding:9px 11px;background:#fff}
+textarea.input{min-height:84px;resize:vertical}
+.input:focus{outline:2px solid var(--gold-400);border-color:var(--gold)}
+.req::after{content:" *";color:var(--bad)}
+.progress{height:8px;background:var(--navy-100);border-radius:99px;overflow:hidden}
+.progress > i{display:block;height:100%;background:linear-gradient(90deg,var(--navy),var(--gold))}
+.notice{border-left:4px solid var(--gold);background:var(--cream);padding:10px 14px;border-radius:0 8px 8px 0;font-size:13px}
+.notice.navy{border-color:var(--navy);background:var(--navy-100)}
+table{width:100%;border-collapse:collapse}
+th{font-size:12px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);text-align:left;padding:8px 10px;border-bottom:1px solid var(--line)}
+td{padding:10px;border-bottom:1px solid var(--line);vertical-align:top}
+tr:hover td{background:#FAFBFD}
+
+/* ---------- Login ---------- */
+.login{min-height:100vh;display:grid;grid-template-columns:1.1fr 1fr}
+.login-hero{background:radial-gradient(circle at 20% 20%,var(--navy-700),var(--navy-950) 70%);color:#fff;padding:56px;display:flex;flex-direction:column;justify-content:space-between;position:relative;overflow:hidden}
+.login-hero::after{content:"";position:absolute;right:-120px;bottom:-120px;width:360px;height:360px;border-radius:50%;border:40px solid rgba(212,188,140,.12)}
+.login-hero h1{color:#fff;font-size:34px;margin-top:28px;max-width:520px}
+.login-hero h1 b{color:var(--gold-400)}
+.login-hero p{color:#C9D2E6;max-width:480px;margin-top:14px}
+.pillars{display:flex;gap:10px;flex-wrap:wrap;margin-top:26px}
+.pillars span{border:1px solid rgba(212,188,140,.5);color:var(--gold-400);padding:4px 12px;border-radius:99px;font-size:12px}
+.login-form{display:grid;place-items:center;padding:32px;background:var(--cream)}
+.login-box{width:100%;max-width:380px}
+.role-pick{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:8px}
+.role-pick button{border:2px solid var(--line);background:#fff;border-radius:10px;padding:14px 10px;text-align:left}
+.role-pick button.sel{border-color:var(--navy);box-shadow:0 0 0 3px var(--navy-100)}
+.role-pick b{display:block;color:var(--navy-900)}
+.sso{width:100%;justify-content:center;margin-top:20px;padding:12px}
+
+/* ---------- Cédula ---------- */
+.stepper{display:flex;gap:6px;margin:4px 0 20px;overflow-x:auto;padding-bottom:4px}
+.step{flex:1;min-width:120px;border:0;background:var(--white);border:1px solid var(--line);border-radius:10px;padding:10px 12px;text-align:left;position:relative}
+.step .n{font-size:11px;font-weight:700;color:var(--gold);letter-spacing:.6px;text-transform:uppercase}
+.step .t{display:block;font-size:13px;font-weight:600;color:var(--navy-900);line-height:1.25;margin-top:2px}
+.step .st{position:absolute;top:9px;right:10px;font-size:12px}
+.step.active{background:var(--navy);border-color:var(--navy)}
+.step.active .t{color:#fff} .step.active .n{color:var(--gold-400)}
+.ced-layout{display:grid;grid-template-columns:1fr 300px;gap:20px;align-items:start}
+.aside-sticky{position:sticky;top:80px;display:flex;flex-direction:column;gap:16px}
+.saved{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--ok)}
+.saved.saving{color:var(--warn)}
+.dot{width:8px;height:8px;border-radius:50%;background:currentColor}
+.entry{border:1px solid var(--line);border-radius:10px;padding:14px;margin-top:12px;background:#fff}
+.entry-head{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap}
+.kv{display:grid;grid-template-columns:130px 1fr;gap:6px 12px;font-size:14px}
+.kv dt{color:var(--muted);font-size:13px}
+.kv dd{margin:0}
+.pasted{display:inline-flex;gap:4px;align-items:center;font-size:11px;color:var(--warn);background:var(--warn-bg);border-radius:99px;padding:1px 8px;margin-left:6px}
+.axis{border:1px solid var(--line);border-radius:10px;padding:14px;background:#fff}
+.axis h4{display:flex;align-items:center;gap:8px}
+.axis .ic{width:28px;height:28px;border-radius:8px;background:var(--gold-100);display:grid;place-items:center}
+.giro{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.giro .g{border-radius:10px;padding:14px;border:1px solid var(--line);background:#fff}
+.giro .g h4{margin-bottom:6px}
+.g-duda{border-top:4px solid var(--navy)!important} .g-error{border-top:4px solid var(--bad)!important} .g-rect{border-top:4px solid var(--ok)!important}
+.drop{border:2px dashed var(--gold-400);background:var(--cream);border-radius:12px;padding:28px;text-align:center}
+.file-ok{display:flex;align-items:center;gap:12px;border:1px solid var(--line);background:#fff;border-radius:10px;padding:12px 14px}
+
+/* ---------- Docente ---------- */
+.split{display:grid;grid-template-columns:1.25fr 1fr;gap:20px;align-items:start}
+.timeline{position:relative;padding-left:26px}
+.timeline::before{content:"";position:absolute;left:9px;top:6px;bottom:6px;width:2px;background:var(--line)}
+.tl{position:relative;margin-bottom:16px}
+.tl::before{content:"";position:absolute;left:-22px;top:6px;width:12px;height:12px;border-radius:50%;background:var(--white);border:3px solid var(--navy)}
+.tl.gold::before{border-color:var(--gold)} .tl.red::before{border-color:var(--bad)} .tl.green::before{border-color:var(--ok)}
+.tl .box{border:1px solid var(--line);border-radius:10px;padding:12px 14px;background:#fff}
+.tl .box.flagged{border-color:var(--gold);box-shadow:0 0 0 3px var(--gold-100)}
+.tl-actions{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
+.comment{margin-top:8px;background:var(--navy-100);border-radius:8px;padding:8px 10px;font-size:13px}
+.rubric-row{padding:12px 0;border-bottom:1px solid var(--line)}
+.levels{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:8px}
+.levels button{border:1px solid var(--line);background:#fff;border-radius:8px;padding:6px 4px;font-size:12px}
+.levels button.sel{background:var(--navy);color:#fff;border-color:var(--navy)}
+.score{display:flex;align-items:baseline;gap:8px}
+.score b{font-size:40px;color:var(--navy-900)}
+.weights{display:flex;height:10px;border-radius:99px;overflow:hidden;margin:8px 0}
+.q{background:var(--cream);border:1px solid var(--gold-400);border-radius:10px;padding:10px 12px;margin-top:8px;font-size:14px}
+.stat{display:flex;flex-direction:column;gap:2px}
+.stat b{font-size:28px;color:var(--navy-900)}
+
+/* ---------- Modal / toast ---------- */
+.overlay{position:fixed;inset:0;background:rgba(11,22,48,.55);display:grid;place-items:center;z-index:50;padding:16px}
+.modal{background:#fff;border-radius:14px;max-width:520px;width:100%;padding:24px;box-shadow:0 20px 60px rgba(0,0,0,.25)}
+.modal ul{margin:12px 0 0;padding-left:20px}
+.modal li{margin:4px 0}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--navy-900);color:#fff;padding:10px 18px;border-radius:10px;font-size:14px;z-index:60;border-left:4px solid var(--gold)}
+.proto-flag{position:fixed;right:12px;bottom:12px;background:var(--gold);color:var(--navy-950);font-size:11px;font-weight:700;padding:4px 10px;border-radius:99px;z-index:40;letter-spacing:.4px}
+
+@media (max-width:980px){
+  .shell{grid-template-columns:1fr}
+  .sidebar{display:flex;gap:6px;overflow-x:auto;border-right:0;border-bottom:1px solid var(--line);padding:8px 12px}
+  .sidebar .sec{display:none}
+  .nav-item{white-space:nowrap;width:auto}
+  .ced-layout,.split,.grid-2,.grid-3,.giro{grid-template-columns:1fr}
+  .aside-sticky{position:static}
+  .login{grid-template-columns:1fr}
+  .login-hero{padding:32px 20px}
+  main{padding:20px 16px}
+  .user-chip .name{display:none}
+  .kv{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- ================= LOGIN ================= -->
+<div id="login" class="login">
+  <div class="login-hero">
+    <div class="brand"><img class="seal-img" src="assets/img/unach-logo-light-sm.png" alt="Escudo UNACH"><div>Benemérita UNACH<small>Modelo Académico Visión 2050</small></div></div>
+    <div>
+      <div class="eyebrow" style="color:var(--gold-400)">Plataforma de Agencia Cognitiva</div>
+      <h1>Tu <b>rastro intelectual</b>, documentado paso a paso.</h1>
+      <p>Construye tu Cédula de Rastro Intelectual mientras resuelves el Reto de Aprendizaje: lo que preguntaste, lo que descartaste, en qué te equivocaste y cómo lo corregiste.</p>
+      <div class="pillars"><span>Interculturalidad</span><span>Sustentabilidad</span><span>Cultura de Paz</span><span>Adopción Crítica de la IA</span></div>
+    </div>
+    <p class="small" style="color:#8C98B6">Lekil Chanel · Buen Aprender</p>
+  </div>
+  <div class="login-form">
+    <div class="login-box">
+      <h2>Iniciar sesión</h2>
+      <p class="muted small" style="margin-top:4px">Usa tu cuenta institucional UNACH.</p>
+      <label class="field"><span>Correo institucional</span><input class="input" value="ana.perez@unach.mx"></label>
+      <p class="small muted" style="margin-top:16px">Entrar como (solo para la demostración):</p>
+      <div class="role-pick">
+        <button class="sel" data-role="est"><b>Estudiante</b><span class="small muted">Agente Soberano</span></button>
+        <button data-role="doc"><b>Docente</b><span class="small muted">Arquitecto de Experiencias</span></button>
+      </div>
+      <button class="btn btn-primary sso" id="btnLogin">Entrar con cuenta institucional</button>
+      <p class="small muted" style="margin-top:14px;text-align:center">Inicio de sesión único (SSO) con la cuenta de la Universidad.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ================= APP ================= -->
+<div id="app" class="hidden">
+  <header class="topbar">
+    <div class="brand"><img class="seal-img" src="assets/img/unach-logo-light-sm.png" alt="Escudo UNACH"><div>Agencia Cognitiva<small>Benemérita UNACH</small></div></div>
+    <div class="spacer"></div>
+    <div class="user-chip"><span class="role-tag" id="roleTag">Estudiante</span><span class="name" id="userName">Ana Pérez</span><div class="avatar" id="userAv">AP</div><button class="link-btn" id="btnLogout">Salir</button></div>
+  </header>
+  <div class="shell">
+    <nav class="sidebar" id="sidebar"></nav>
+    <main id="view"></main>
+  </div>
+</div>
+
+<div class="proto-flag">PROTOTIPO · DATOS DE EJEMPLO</div>
+<div id="modalRoot"></div>
+
+<script>
+/* =========================================================
+   Datos de ejemplo (basados en la ilustración operativa de
+   la Cédula del Modelo Académico UNACH 2026)
+   ========================================================= */
+const S = {
+  role: 'est',
+  step: 0,
+  rfaUploaded: false,
+  submitted: false,
+  reto: {
+    titulo: 'Sistema de captación pluvial para Los Altos de Chiapas',
+    tipo: 'Situado',
+    ua: 'Gestión Sustentable del Territorio',
+    docente: 'Mtro. Carlos Ruiz',
+    descripcion: 'Diseñar un sistema de captación de agua de lluvia para una comunidad de Los Altos de Chiapas, integrando materiales locales, bajo costo y técnicas de autoconstrucción.',
+    andamiaje: [
+      { f: 'Manual de Captación de Agua de Lluvia (CONAGUA, 2021)', c: 'Cálculo de demanda por familia y superficie de captación' },
+      { f: 'Principios de Hidráulica Básica (texto guía de la unidad)', c: 'Presiones en tanques y velocidad de flujo en canales' },
+      { f: 'Normatividad estatal sobre salud y calidad del agua', c: 'Parámetros mínimos de filtrado para consumo humano' },
+    ],
+    criteriosIA: 'Se permite usar IA generativa para explorar materiales y alternativas técnicas. No se permite usarla para redactar la propuesta final ni la Declaración de Soberanía. Todo uso debe registrarse en la Bitácora.',
+  },
+  b1: {
+    fuentesBase: [
+      'Usé el manual de CONAGUA para estimar la demanda de agua por familia y dimensionar el techo de captación.',
+      'Con el texto de hidráulica calculé la presión en el tanque de almacenamiento.',
+      'La norma estatal me dio los parámetros mínimos de filtrado antes del consumo.',
+    ],
+    bitacora: [
+      { tipo: 'IA', herr: 'Asistente de IA autorizado', prompt: '¿Qué materiales porosos naturales del sureste de México sirven como filtros primarios para agua de lluvia?', resp: 'Sugirió carbón vegetal, grava de río, arena sílica y fibra de coco.' },
+      { tipo: 'IA', herr: 'Asistente de IA autorizado', prompt: 'Compara la eficiencia del carbón vegetal artesanal contra el carbón activado comercial para sedimentos gruesos.', resp: 'Para sedimentos gruesos el carbón artesanal es suficiente; esto respalda producirlo localmente.' },
+      { tipo: 'Humano', quien: 'Comité de agua de la comunidad', prompt: 'Entrevista presencial sobre mantenimiento del sistema.', resp: 'Preocupación: si el tanque se rompe, no hay dinero para traer otro desde la ciudad. Cambió mi enfoque de "comprar equipo" a "construir en sitio".', consent: true },
+    ],
+    propuesta: 'Comprar filtros comerciales de tres etapas y tanques de polietileno de 5,000 L. Me enfoqué solo en la eficiencia técnica, sin considerar el transporte a zonas de difícil acceso ni el costo de reemplazo para las familias.',
+  },
+  b2: {
+    fuentes: [
+      'Artículos técnicos sobre biofiltros con tezontle y grava de río.',
+      'Guías de autoconstrucción para separadores de primeras lluvias.',
+      'Estudios de pluviosidad histórica de Los Altos de Chiapas.',
+    ],
+    descartes: [
+      { origen: 'IA', que: 'Biopolímeros importados para sellar los tanques', porque: 'Alucinación contextual: no se consiguen en la región, su costo es prohibitivo y crean dependencia tecnológica externa.' },
+      { origen: 'Fuente', que: 'Manual de arquitectura sustentable de España', porque: 'Calculado para lluvias mediterráneas; en Chiapas los tanques quedarían subdimensionados.' },
+    ],
+    duda: '¿Cómo garantizar que el agua sea potable sin usar sistemas eléctricos de luz UV?',
+    error: 'Diseñé un filtro de arena con capas demasiado finas. En la prueba a escala se tapó en 10 minutos por los sedimentos de las primeras lluvias.',
+    rect: 'El problema no era el filtro, sino no desviar las primeras aguas. Agregué un bypass manual para los primeros 15 litros.',
+  },
+  b3: {
+    ejes: [
+      { k: 'Interculturalidad', i: '🤝', t: 'Integra el saber local del uso de cal para estabilizar mezclas y respeta los materiales y la estética de la región.' },
+      { k: 'Sustentabilidad', i: '🌱', t: 'Elimina el transporte de tanques pesados y usa grava y arena de río con extracción moderada.' },
+      { k: 'Cultura de Paz', i: '🕊️', t: 'Propone autoconstrucción cooperativa: los comuneros participan como socios, no como beneficiarios pasivos.' },
+      { k: 'Adopción Crítica de la IA', i: '🧭', t: 'La IA ayudó a mapear materiales, pero rechacé sus propuestas que no encajaban con la economía local.' },
+    ],
+    riesgos: 'La extracción de arena y grava de río puede afectar el cauce si no se controla. Se mantiene porque es el único material accesible; se propone un esquema de extracción moderada acordado con la comunidad.',
+  },
+  b4: {
+    decl: 'La arquitectura final del sistema es producto de mi propia síntesis. La IA aceleró el mapeo de materiales, pero el cambio de un modelo de "consumo tecnológico" a uno de "tecnología apropiada" fue una decisión mía, nacida del diálogo con la comunidad.',
+    acepto: true,
+  },
+};
+
+const STEPS = [
+  { n: 'Momento 1', t: 'Reto y Andamiaje' },
+  { n: 'Bloque I', t: 'Construcción Dialógica' },
+  { n: 'Bloque II', t: 'Curaduría Crítica' },
+  { n: 'Bloque III', t: 'Control Transversal' },
+  { n: 'Bloque IV', t: 'Meta-reflexión' },
+  { n: 'Momento 5', t: 'RFA y envío' },
+];
+
+const ALUMNOS = [
+  { n: 'Ana Pérez Gómez', st: 'Enviada', p: 100 },
+  { n: 'Luis Hernández Ruiz', st: 'Enviada', p: 100 },
+  { n: 'María José Santiz López', st: 'En progreso', p: 66 },
+  { n: 'Jorge Díaz Méndez', st: 'En progreso', p: 33 },
+  { n: 'Karla Gómez Pérez', st: 'Sin iniciar', p: 0 },
+];
+
+/* Evaluación docente */
+const E = {
+  flags: new Set(['desc0', 'error']),
+  comments: { giro: 'Excelente: convertiste el error del filtro en un hallazgo. Prepárate para explicar cómo calculaste los 15 litros.' },
+  rubric: { tray: 3, desc: 3, ejes: 2, decl: 3, rfa: 2, def: null },
+};
+const RUBRIC = [
+  { k: 'tray', t: 'Transparencia del rastro', d: 'Bitácora completa y honesta, con evolución visible desde la propuesta inicial.', g: 'Trayectoria' },
+  { k: 'desc', t: 'Vigilancia epistemológica', d: 'Criterios de descarte fundamentados; detección de sesgos o alucinaciones.', g: 'Trayectoria' },
+  { k: 'ejes', t: 'Verificación de los 4 ejes', d: 'Análisis reflexivo de impacto y gestión honesta de riesgos.', g: 'Trayectoria' },
+  { k: 'decl', t: 'Soberanía intelectual', d: 'Declaración coherente con el rastro documentado.', g: 'Trayectoria' },
+  { k: 'rfa', t: 'Resultado Final de Aprendizaje', d: 'Viabilidad y pertinencia de la solución.', g: 'RFA' },
+  { k: 'def', t: 'Defensa Oral', d: 'Dominio del porqué y para qué de sus decisiones.', g: 'Defensa' },
+];
+const LEVELS = ['Inicial', 'En desarrollo', 'Logrado', 'Destacado'];
+const WEIGHTS = { Trayectoria: 60, Defensa: 25, RFA: 15 }; // ilustrativo
+
+/* =========================================================
+   Utilidades
+   ========================================================= */
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+function toast(msg) {
+  const t = document.createElement('div'); t.className = 'toast'; t.textContent = msg;
+  document.body.appendChild(t); setTimeout(() => t.remove(), 2600);
+}
+function modal(html) {
+  $('#modalRoot').innerHTML = `<div class="overlay" onclick="if(event.target===this)closeModal()"><div class="modal">${html}</div></div>`;
+}
+function closeModal() { $('#modalRoot').innerHTML = ''; }
+
+let saveTimer;
+function markSaving() {
+  document.querySelectorAll('.saved').forEach(el => { el.classList.add('saving'); el.innerHTML = '<span class="dot"></span> Guardando…'; });
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(() => document.querySelectorAll('.saved').forEach(el => { el.classList.remove('saving'); el.innerHTML = '<span class="dot"></span> Guardado automáticamente'; }), 900);
+}
+const savedTag = () => '<span class="saved"><span class="dot"></span> Guardado automáticamente</span>';
+
+// Campo editable enlazado al estado: path tipo "b1.propuesta"
+function field(label, path, opts = {}) {
+  const val = path.split('.').reduce((o, k) => o[k], S);
+  const ro = S.submitted ? 'readonly' : '';
+  const el = opts.input
+    ? `<input class="input" data-bind="${path}" value="${esc(val)}" ${ro}>`
+    : `<textarea class="input" data-bind="${path}" ${ro} style="min-height:${opts.h || 84}px">${esc(val)}</textarea>`;
+  return `<label class="field"><span class="${opts.req === false ? '' : 'req'}">${label}${opts.hint ? ` <em>· ${opts.hint}</em>` : ''}</span>${el}</label>`;
+}
+function bindFields(root) {
+  root.querySelectorAll('[data-bind]').forEach(el => {
+    el.addEventListener('input', () => {
+      const keys = el.dataset.bind.split('.'); const last = keys.pop();
+      keys.reduce((o, k) => o[k], S)[last] = el.value;
+      markSaving();
+    });
+    el.addEventListener('paste', () => {
+      if (!el.parentElement.querySelector('.pasted')) {
+        el.previousElementSibling.insertAdjacentHTML('beforeend', '<span class="pasted">⧉ texto pegado</span>');
+      }
+    });
+  });
+}
+
+/* =========================================================
+   Navegación
+   ========================================================= */
+const NAV = {
+  est: [
+    { sec: 'Mi formación' },
+    { id: 'est-home', ico: '🏠', t: 'Mis cédulas' },
+    { id: 'est-cedula', ico: '📘', t: 'Cédula en curso' },
+    { sec: 'Ayuda' },
+    { id: 'est-guia', ico: '🧭', t: '¿Cómo funciona?' },
+  ],
+  doc: [
+    { sec: 'Docencia' },
+    { id: 'doc-home', ico: '🏠', t: 'Panel docente' },
+    { id: 'doc-reto', ico: '➕', t: 'Nuevo reto' },
+    { id: 'doc-eval', ico: '⚖️', t: 'Evaluar cédula' },
+  ],
+};
+let current = 'est-home';
+function go(id) { current = id; renderNav(); render(); window.scrollTo(0, 0); }
+function renderNav() {
+  $('#sidebar').innerHTML = NAV[S.role].map(i => i.sec
+    ? `<div class="sec">${i.sec}</div>`
+    : `<button class="nav-item ${current === i.id ? 'active' : ''}" onclick="go('${i.id}')"><span class="ico">${i.ico}</span>${i.t}</button>`).join('');
+}
+function render() { const v = $('#view'); v.innerHTML = VIEWS[current](); bindFields(v); }
+
+/* =========================================================
+   Vistas — Estudiante
+   ========================================================= */
+function progressPct() { return S.submitted ? 100 : Math.round(((S.step) / (STEPS.length)) * 100) || 15; }
+
+const VIEWS = {};
+VIEWS['est-home'] = () => `
+  <div class="page-head"><div><div class="eyebrow">Periodo agosto – diciembre 2026</div><h1>Mis Cédulas de Rastro Intelectual</h1><p class="muted">Una cédula por Unidad de Aprendizaje y Reto.</p></div></div>
+  <div class="grid-3">
+    <div class="card stat"><span class="muted small">Cédulas activas</span><b>3</b></div>
+    <div class="card stat"><span class="muted small">Enviadas</span><b>${S.submitted ? 2 : 1}</b></div>
+    <div class="card stat"><span class="muted small">Próxima defensa oral</span><b style="font-size:20px">14 de noviembre</b></div>
+  </div>
+  <div class="card" style="margin-top:16px">
+    <div class="entry-head"><div><span class="badge b-gold">Reto situado</span><h3 style="margin-top:6px">${S.reto.titulo}</h3><p class="small muted">${S.reto.ua} · ${S.reto.docente}</p></div>
+      ${S.submitted ? '<span class="badge b-ok">● Enviada</span>' : '<span class="badge b-warn">● En progreso</span>'}</div>
+    <div class="row" style="margin-top:6px"><div class="progress" style="flex:1"><i style="width:${S.submitted ? 100 : 66}%"></i></div><span class="small muted">${S.submitted ? '6 de 6' : '4 de 6'} etapas</span></div>
+    <div class="row" style="margin-top:14px"><button class="btn btn-primary" onclick="go('est-cedula')">${S.submitted ? 'Ver cédula' : 'Continuar cédula'} →</button></div>
+  </div>
+  <div class="card">
+    <div class="entry-head"><div><span class="badge b-navy">Reto conceptual</span><h3 style="margin-top:6px">La noción de "justicia": marco constitucional y sistemas normativos indígenas</h3><p class="small muted">Ética y Derecho Intercultural · Dra. Laura Méndez</p></div><span class="badge b-ok">● Enviada</span></div>
+    <div class="row" style="margin-top:6px"><div class="progress" style="flex:1"><i style="width:100%"></i></div><span class="small muted">Evaluada · Destacado</span></div>
+  </div>
+  <div class="card">
+    <div class="entry-head"><div><span class="badge b-gold">Reto situado</span><h3 style="margin-top:6px">Monitoreo de humedad para una cooperativa cafetalera</h3><p class="small muted">Sistemas Embebidos · Ing. Pablo Torres</p></div><span class="badge b-bad">● Sin iniciar</span></div>
+    <div class="row" style="margin-top:6px"><div class="progress" style="flex:1"><i style="width:0%"></i></div><span class="small muted">0 de 6 etapas</span></div>
+  </div>`;
+
+VIEWS['est-guia'] = () => `
+  <div class="page-head"><div><div class="eyebrow">Agencia Cognitiva</div><h1>¿Cómo funciona tu cédula?</h1><p class="muted">Seis momentos para pasar de la respuesta "correcta" a un conocimiento propio.</p></div></div>
+  <div class="grid-3">
+    ${[
+      ['1', 'Reto y Andamiaje', 'Tu docente plantea el reto y las fuentes obligatorias: tu "piso de seguridad".'],
+      ['2', 'Construcción Dialógica', 'Conversa con la IA, con expertos y con la comunidad. Registra cada diálogo.'],
+      ['3', 'Curaduría Crítica', 'Decide qué descartas y por qué. Documenta tus dudas, errores y rectificaciones.'],
+      ['4', 'Control de Calidad', 'Revisa tu propuesta con los cuatro ejes: Interculturalidad, Sustentabilidad, Cultura de Paz e IA.'],
+      ['5', 'RFA y Defensa Oral', 'Entrega tu producto final y defiende tus decisiones ante tu docente.'],
+      ['6', 'Evaluación', 'Se valora sobre todo la honestidad y calidad de tu trayectoria, no solo el resultado.'],
+    ].map(([n, t, d]) => `<div class="card"><div class="eyebrow">Momento ${n}</div><h3 style="margin:4px 0 6px">${t}</h3><p class="small muted">${d}</p></div>`).join('')}
+  </div>
+  <div class="notice" style="margin-top:16px"><b>Recuerda:</b> equivocarte no te resta puntos. Documentar un error y cómo lo superaste demuestra más agencia cognitiva que un producto "perfecto" sin rastro. <i>(K'uxubinel · Empatía Activa)</i></div>`;
+
+VIEWS['est-cedula'] = () => {
+  const stepper = STEPS.map((s, i) => {
+    const done = S.submitted || i < S.step;
+    return `<button class="step ${i === S.step ? 'active' : ''}" onclick="S.step=${i};render()"><span class="n">${s.n}</span><span class="t">${s.t}</span><span class="st">${done ? '✅' : ''}</span></button>`;
+  }).join('');
+  const body = [stepReto, stepB1, stepB2, stepB3, stepB4, stepRFA][S.step]();
+  const nav = `<div class="row" style="justify-content:space-between;margin-top:20px">
+      <button class="btn btn-ghost" ${S.step === 0 ? 'disabled style="opacity:.4"' : ''} onclick="S.step--;render()">← Anterior</button>
+      ${S.step < STEPS.length - 1 ? `<button class="btn btn-primary" onclick="S.step++;render()">Siguiente →</button>` : ''}
+    </div>`;
+  return `
+  <div class="page-head"><div><div class="eyebrow">${S.reto.ua}</div><h1>Cédula de Rastro Intelectual</h1><p class="muted">${S.reto.titulo}</p></div>
+    <div class="row">${S.submitted ? '<span class="badge b-ok">● Enviada · solo lectura</span>' : savedTag()}</div></div>
+  <div class="stepper">${stepper}</div>
+  <div class="ced-layout">
+    <div>${body}${nav}</div>
+    <aside class="aside-sticky">
+      <div class="card"><h4>Tu progreso</h4><div class="progress" style="margin:10px 0 6px"><i style="width:${S.submitted ? 100 : Math.max(10, Math.round(S.step / (STEPS.length - 1) * 100))}%"></i></div>
+        <ul class="small" style="padding-left:18px;margin:8px 0 0">
+          ${STEPS.map((s, i) => `<li style="color:${S.submitted || i < S.step ? 'var(--ok)' : i === S.step ? 'var(--navy)' : 'var(--muted)'}">${s.n}: ${s.t}</li>`).join('')}
+        </ul></div>
+      <div class="card"><h4>🧭 Uso de IA permitido en este reto</h4><p class="small" style="margin-top:8px">${S.reto.criteriosIA}</p></div>
+      <div class="notice navy"><b>Protege tus datos:</b> no incluyas datos personales ni información sensible en tus prompts. <span class="muted">(Lineamientos de IA UNACH, Art. 10)</span></div>
+    </aside>
+  </div>`;
+};
+
+function stepReto() {
+  return `<div class="card">
+    <div class="row"><span class="badge b-gold">Reto ${S.reto.tipo}</span><span class="small muted">Planteado por ${S.reto.docente}</span></div>
+    <h2 style="margin-top:10px">${S.reto.titulo}</h2>
+    <p style="margin-top:8px">${S.reto.descripcion}</p>
+  </div>
+  <div class="card"><h3>Andamiaje Pedagógico</h3><p class="small muted" style="margin-top:4px">Conceptos y fuentes obligatorias definidos por tu docente: el "piso de seguridad" de tu investigación.</p>
+    <table style="margin-top:10px"><tr><th>Fuente obligatoria</th><th>Concepto nuclear</th></tr>
+    ${S.reto.andamiaje.map(a => `<tr><td><b>${a.f}</b></td><td class="small">${a.c}</td></tr>`).join('')}</table>
+  </div>`;
+}
+
+function stepB1() {
+  return `<div class="card"><div class="eyebrow">Bloque I</div><h2>Andamiaje y Construcción Dialógica</h2>
+    <h3 style="margin-top:18px">1.1 Fuentes Base</h3><p class="small muted">¿Cómo usaste cada fuente obligatoria?</p>
+    ${S.reto.andamiaje.map((a, i) => field(a.f, `b1.fuentesBase.${i}`, { h: 60 })).join('')}
+  </div>
+  <div class="card">
+    <div class="entry-head"><div><h3>1.2 Bitácora de Interacción (IA / Humanos)</h3><p class="small muted">Registra tus prompts y los diálogos con expertos o la comunidad.</p></div>
+      ${S.submitted ? '' : `<div class="row"><button class="btn btn-ghost btn-sm" onclick="addEntry('IA')">+ Interacción con IA</button><button class="btn btn-ghost btn-sm" onclick="addEntry('Humano')">+ Diálogo humano</button></div>`}</div>
+    ${S.b1.bitacora.map((e, i) => `<div class="entry">
+      <div class="entry-head"><div class="row"><span class="badge ${e.tipo === 'IA' ? 'b-navy' : 'b-gold'}">${e.tipo === 'IA' ? '🤖 IA' : '🗣️ Humano'}</span><b class="small">Registro ${i + 1}</b>
+        ${e.tipo === 'IA' ? `<span class="small muted">${esc(e.herr)}</span>` : `<span class="small muted">${esc(e.quien)}</span>`}</div>
+        ${e.tipo === 'Humano' ? `<span class="badge ${e.consent ? 'b-ok' : 'b-bad'}">${e.consent ? '✔ Consentimiento otorgado' : 'Sin consentimiento'}</span>` : ''}</div>
+      ${field(e.tipo === 'IA' ? 'Prompt' : 'Contexto del diálogo', `b1.bitacora.${i}.prompt`, { h: 56 })}
+      ${field(e.tipo === 'IA' ? 'Respuesta clave de la IA' : 'Puntos medulares', `b1.bitacora.${i}.resp`, { h: 56 })}
+    </div>`).join('')}
+  </div>
+  <div class="card"><h3>1.3 Propuesta Inicial</h3><p class="small muted">Tu primera idea, antes de investigar. Servirá para medir cómo evolucionó tu pensamiento.</p>
+    ${field('Hipótesis o idea primaria', 'b1.propuesta', { h: 96 })}</div>`;
+}
+function addEntry(tipo) {
+  S.b1.bitacora.push(tipo === 'IA'
+    ? { tipo, herr: 'Asistente de IA autorizado', prompt: '', resp: '' }
+    : { tipo, quien: 'Nuevo interlocutor', prompt: '', resp: '', consent: false });
+  render(); markSaving();
+}
+
+function stepB2() {
+  return `<div class="card"><div class="eyebrow">Bloque II</div><h2>Curaduría Crítica y Vigilancia Epistemológica</h2>
+    <h3 style="margin-top:18px">2.1 Fuentes exploradas de manera autónoma</h3>
+    ${S.b2.fuentes.map((f, i) => field(`Fuente ${i + 1}`, `b2.fuentes.${i}`, { input: true, req: i === 0 })).join('')}
+  </div>
+  <div class="card"><h3>2.2 Criterios de Descarte</h3><p class="small muted">¿Qué rechazaste y por qué? Sesgos, alucinaciones, falta de contexto local o de rigor.</p>
+    ${S.b2.descartes.map((d, i) => `<div class="entry"><div class="entry-head"><div class="row"><span class="badge ${d.origen === 'IA' ? 'b-navy' : 'b-gold'}">Descarte ${d.origen === 'IA' ? 'de IA' : 'de fuente'}</span><b class="small">${esc(d.que)}</b></div></div>
+      ${field('Justificación', `b2.descartes.${i}.porque`, { h: 56 })}</div>`).join('')}
+  </div>
+  <div class="card"><h3>2.3 Giro Cognitivo</h3><p class="small muted">Narra cómo el error se convirtió en hallazgo.</p>
+    <div class="giro" style="margin-top:10px">
+      <div class="g g-duda"><h4>❓ Duda emergente</h4><textarea class="input" data-bind="b2.duda" ${S.submitted ? 'readonly' : ''} style="min-height:120px">${esc(S.b2.duda)}</textarea></div>
+      <div class="g g-error"><h4>⚠️ Error o fallo</h4><textarea class="input" data-bind="b2.error" ${S.submitted ? 'readonly' : ''} style="min-height:120px">${esc(S.b2.error)}</textarea></div>
+      <div class="g g-rect"><h4>✅ Rectificación</h4><textarea class="input" data-bind="b2.rect" ${S.submitted ? 'readonly' : ''} style="min-height:120px">${esc(S.b2.rect)}</textarea></div>
+    </div>
+  </div>`;
+}
+
+function stepB3() {
+  return `<div class="card"><div class="eyebrow">Bloque III</div><h2>Control de Calidad Transversal</h2>
+    <h3 style="margin-top:18px">3.1 Matriz de Impacto</h3><p class="small muted">¿Cómo se alinea tu propuesta con los cuatro ejes del modelo?</p>
+    <div class="grid-2" style="margin-top:12px">
+      ${S.b3.ejes.map((e, i) => `<div class="axis"><h4><span class="ic">${e.i}</span>${e.k}</h4>
+        <textarea class="input" data-bind="b3.ejes.${i}.t" ${S.submitted ? 'readonly' : ''} style="margin-top:8px;min-height:90px">${esc(e.t)}</textarea></div>`).join('')}
+    </div>
+  </div>
+  <div class="card"><h3>3.2 Gestión de Riesgos y Justificación</h3><p class="small muted">Si tu solución tiene algún impacto no deseado, reconócelo y explica por qué la mantuviste.</p>
+    ${field('Riesgo identificado y justificación', 'b3.riesgos', { h: 96 })}</div>`;
+}
+
+function stepB4() {
+  return `<div class="card"><div class="eyebrow">Bloque IV</div><h2>Meta-reflexión y Autenticidad</h2>
+    <p class="muted" style="margin-top:6px">Sustento de la Agencia: explica qué parte de la solución es fruto de tu síntesis personal y cómo integraste los apoyos tecnológicos sin delegar tu juicio.</p>
+    ${field('Declaración de Soberanía Intelectual', 'b4.decl', { h: 150 })}
+    <label class="row" style="margin-top:14px;align-items:flex-start;gap:10px"><input type="checkbox" ${S.b4.acepto ? 'checked' : ''} ${S.submitted ? 'disabled' : ''} onchange="S.b4.acepto=this.checked;markSaving()" style="margin-top:4px">
+      <span class="small">Declaro que el uso de IA en este trabajo está registrado en mi Bitácora y que la solución final es de mi autoría. <span class="muted">(Lineamientos de IA UNACH, Arts. 12 y 35)</span></span></label>
+  </div>`;
+}
+
+function stepRFA() {
+  return `<div class="card"><div class="eyebrow">Momento 5</div><h2>Resultado Final de Aprendizaje</h2>
+    <p class="muted" style="margin-top:6px">Sube tu producto: documento técnico, prototipo, aplicación, infografía o proyecto de incidencia.</p>
+    <div style="margin-top:14px">${S.rfaUploaded
+      ? `<div class="file-ok"><span style="font-size:24px">📄</span><div style="flex:1"><b>Sistema_Captacion_Pluvial_LosAltos.pdf</b><div class="small muted">4.2 MB · subido hace un momento</div></div>${S.submitted ? '' : '<button class="btn btn-ghost btn-sm" onclick="S.rfaUploaded=false;render()">Quitar</button>'}</div>`
+      : `<div class="drop"><div style="font-size:30px">⬆️</div><b>Arrastra aquí tu archivo</b><p class="small muted">PDF, imágenes, video o ZIP · máx. 50 MB</p><button class="btn btn-gold" style="margin-top:12px" onclick="S.rfaUploaded=true;render();toast('Archivo cargado')">Seleccionar archivo</button></div>`}</div>
+  </div>
+  <div class="card"><h3>Defensa Oral</h3><div class="row" style="margin-top:8px"><span class="badge b-navy">📅 14 de noviembre · 10:00</span><span class="small muted">Aula 3 · Facultad de Ingeniería</span></div>
+    <p class="small muted" style="margin-top:8px">Tu docente usará tu Cédula como base para preguntarte el porqué y el para qué de tus decisiones.</p></div>
+  <div class="card" style="border-color:var(--gold)">
+    <div class="entry-head"><div><h3>Enviar Cédula</h3><p class="small muted">Al enviarla quedará congelada como evidencia. Solo tu docente podrá reabrirla.</p></div>
+      ${S.submitted ? '<span class="badge b-ok">● Enviada</span>' : '<button class="btn btn-primary" onclick="submitCedula()">Enviar cédula</button>'}</div>
+  </div>`;
+}
+
+function missingItems() {
+  const m = [];
+  const empty = v => !String(v || '').trim();
+  S.b1.fuentesBase.forEach((v, i) => empty(v) && m.push(`Bloque I · Fuente base ${i + 1}`));
+  if (!S.b1.bitacora.some(e => !empty(e.prompt) && !empty(e.resp))) m.push('Bloque I · Al menos un registro completo en la Bitácora');
+  S.b1.bitacora.forEach((e, i) => (empty(e.prompt) || empty(e.resp)) && m.push(`Bloque I · Registro ${i + 1} de la Bitácora incompleto`));
+  if (empty(S.b1.propuesta)) m.push('Bloque I · Propuesta Inicial');
+  if (empty(S.b2.fuentes[0])) m.push('Bloque II · Al menos una fuente explorada');
+  S.b2.descartes.forEach((d, i) => empty(d.porque) && m.push(`Bloque II · Justificación del descarte ${i + 1}`));
+  ['duda', 'error', 'rect'].forEach(k => empty(S.b2[k]) && m.push(`Bloque II · Giro Cognitivo: ${{ duda: 'duda', error: 'error', rect: 'rectificación' }[k]}`));
+  S.b3.ejes.forEach(e => empty(e.t) && m.push(`Bloque III · Eje ${e.k}`));
+  if (empty(S.b3.riesgos)) m.push('Bloque III · Gestión de Riesgos');
+  if (empty(S.b4.decl)) m.push('Bloque IV · Declaración de Soberanía');
+  if (!S.b4.acepto) m.push('Bloque IV · Confirmar declaración de uso de IA');
+  if (!S.rfaUploaded) m.push('Momento 5 · Archivo del Resultado Final de Aprendizaje');
+  return m;
+}
+function submitCedula() {
+  const m = missingItems();
+  if (m.length) {
+    modal(`<h3>⚠️ Aún no puedes enviar tu cédula</h3>
+      <p class="small muted" style="margin-top:6px">Faltan estos elementos. Recuerda: no se evalúa si "te equivocaste", solo que tu rastro esté completo.</p>
+      <ul class="small">${m.map(x => `<li>${x}</li>`).join('')}</ul>
+      <div class="row" style="justify-content:flex-end;margin-top:18px"><button class="btn btn-primary" onclick="closeModal()">Entendido</button></div>`);
+    return;
+  }
+  modal(`<h3>¿Enviar tu Cédula de Rastro Intelectual?</h3><p class="small muted" style="margin-top:6px">Después de enviarla no podrás editarla.</p>
+    <div class="row" style="justify-content:flex-end;margin-top:18px"><button class="btn btn-ghost" onclick="closeModal()">Cancelar</button><button class="btn btn-primary" onclick="S.submitted=true;closeModal();render();toast('Cédula enviada a tu docente')">Sí, enviar</button></div>`);
+}
+
+/* =========================================================
+   Vistas — Docente
+   ========================================================= */
+VIEWS['doc-home'] = () => `
+  <div class="page-head"><div><div class="eyebrow">Gestión Sustentable del Territorio · Grupo 5A</div><h1>Panel docente</h1><p class="muted">Seguimiento de las cédulas de tu grupo.</p></div>
+    <button class="btn btn-gold" onclick="go('doc-reto')">+ Nuevo reto</button></div>
+  <div class="grid-3">
+    <div class="card stat"><span class="muted small">Cédulas enviadas</span><b>2 / 5</b></div>
+    <div class="card stat"><span class="muted small">En progreso</span><b>2</b></div>
+    <div class="card stat"><span class="muted small">Defensas programadas</span><b>2</b></div>
+  </div>
+  <div class="card" style="margin-top:16px">
+    <div class="entry-head"><div><span class="badge b-gold">Reto situado</span><h3 style="margin-top:6px">${S.reto.titulo}</h3></div><span class="small muted">Cierre: 10 de noviembre</span></div>
+    <table style="margin-top:8px"><tr><th>Estudiante</th><th>Estado</th><th style="width:30%">Avance</th><th></th></tr>
+    ${ALUMNOS.map(a => `<tr><td><b>${a.n}</b></td>
+      <td><span class="badge ${a.st === 'Enviada' ? 'b-ok' : a.st === 'En progreso' ? 'b-warn' : 'b-bad'}">● ${a.st}</span></td>
+      <td><div class="progress"><i style="width:${a.p}%"></i></div></td>
+      <td style="text-align:right">${a.st === 'Enviada' ? `<button class="btn btn-primary btn-sm" onclick="go('doc-eval')">Evaluar</button>` : '<span class="small muted">—</span>'}</td></tr>`).join('')}
+    </table>
+  </div>`;
+
+VIEWS['doc-reto'] = () => `
+  <div class="page-head"><div><div class="eyebrow">Momento 1 · Fase de diseño</div><h1>Nuevo Reto de Aprendizaje</h1><p class="muted">Diseña el desafío y el andamiaje que tus estudiantes usarán como piso de seguridad.</p></div></div>
+  <div class="card">
+    <label class="field"><span class="req">Título del reto</span><input class="input" placeholder="Ej. Sistema de gestión hídrica para una cooperativa cafetalera"></label>
+    <div class="grid-2">
+      <label class="field"><span class="req">Unidad de Aprendizaje</span><select class="input"><option>Gestión Sustentable del Territorio</option><option>Hidráulica Aplicada</option></select></label>
+      <label class="field"><span class="req">Tipo de reto</span><select class="input"><option>Situado · problemática real del territorio</option><option>Conceptual · dilema teórico o deconstrucción</option></select></label>
+    </div>
+    <label class="field"><span class="req">Descripción y problemática</span><textarea class="input" placeholder="¿Qué problema concreto deben resolver? ¿Con qué comunidad, sector o institución?"></textarea></label>
+  </div>
+  <div class="card"><h3>Andamiaje Pedagógico</h3><p class="small muted">Conceptos nucleares, bibliografía obligatoria, bases de datos y marcos éticos.</p>
+    <div class="grid-2"><label class="field"><span>Fuente obligatoria</span><input class="input" placeholder="Ej. Manual de Captación de Agua de Lluvia (CONAGUA)"></label>
+    <label class="field"><span>Concepto nuclear</span><input class="input" placeholder="Ej. Cálculo de demanda por familia"></label></div>
+    <button class="btn btn-ghost btn-sm" style="margin-top:12px">+ Agregar fuente</button>
+  </div>
+  <div class="card"><h3>🧭 Criterios de uso de IA</h3><p class="small muted">Define qué uso de IA está permitido en este reto. Tus estudiantes lo verán en todo momento. <span class="muted">(Lineamientos de IA UNACH, Art. 35)</span></p>
+    <label class="field"><span class="req">Uso permitido</span><textarea class="input" placeholder="Ej. Se permite usar IA para explorar alternativas técnicas; no para redactar la propuesta final."></textarea></label></div>
+  <div class="row" style="justify-content:flex-end;margin-top:16px"><button class="btn btn-ghost" onclick="go('doc-home')">Cancelar</button><button class="btn btn-primary" onclick="toast('Reto publicado para el grupo 5A');go('doc-home')">Publicar reto</button></div>`;
+
+function tlItem(id, color, title, html, sub) {
+  const flagged = E.flags.has(id);
+  return `<div class="tl ${color}"><div class="box ${flagged ? 'flagged' : ''}">
+    <div class="entry-head" style="margin-bottom:4px"><b class="small" style="color:var(--navy-900)">${title}</b>${sub ? `<span class="small muted">${sub}</span>` : ''}</div>
+    <div class="small">${html}</div>
+    ${E.comments[id] ? `<div class="comment">💬 ${esc(E.comments[id])}</div>` : ''}
+    <div class="tl-actions">
+      <button class="btn ${flagged ? 'btn-gold' : 'btn-ghost'} btn-sm" onclick="toggleFlag('${id}')">${flagged ? '★ Marcado para defensa' : '☆ Marcar para defensa'}</button>
+      <button class="btn btn-ghost btn-sm" onclick="addComment('${id}')">💬 Comentar</button>
+    </div></div></div>`;
+}
+const QUESTIONS = {
+  propuesta: '¿Qué te hizo abandonar la idea de comprar tanques comerciales? ¿Qué habría pasado si la mantenías?',
+  bit2: 'La IA respaldó el carbón artesanal. ¿Cómo verificaste esa afirmación fuera de la IA?',
+  entrevista: '¿Cómo cambió tu diseño después de hablar con el comité de agua?',
+  desc0: 'Calificas la sugerencia de biopolímeros como "alucinación contextual". ¿Qué criterios usaste para detectarla?',
+  error: '¿Cómo calculaste que bastaban 15 litros para el bypass de primeras aguas?',
+  giro: '¿Qué aprendiste del colapso del filtro que no habrías aprendido si funcionaba a la primera?',
+  riesgo: 'Si la comunidad no puede controlar la extracción de arena, ¿qué alternativa propondrías?',
+  decl: '¿Qué parte de la solución consideras exclusivamente tuya?',
+};
+function toggleFlag(id) { E.flags.has(id) ? E.flags.delete(id) : E.flags.add(id); render(); }
+function addComment(id) {
+  modal(`<h3>Comentario de retroalimentación</h3><p class="small muted" style="margin-top:4px">Orienta, no sólo califiques. El error es un hallazgo pedagógico.</p>
+    <textarea id="cTxt" class="input" style="margin-top:12px;min-height:100px">${esc(E.comments[id] || '')}</textarea>
+    <div class="row" style="justify-content:flex-end;margin-top:14px"><button class="btn btn-ghost" onclick="closeModal()">Cancelar</button>
+    <button class="btn btn-primary" onclick="E.comments['${id}']=document.getElementById('cTxt').value;closeModal();render()">Guardar</button></div>`);
+}
+function score() {
+  const groups = {};
+  RUBRIC.forEach(r => { (groups[r.g] = groups[r.g] || []).push(r.k); });
+  let total = 0, wsum = 0;
+  for (const [g, ks] of Object.entries(groups)) {
+    const vals = ks.map(k => E.rubric[k]).filter(v => v !== null);
+    if (!vals.length) continue;
+    total += (vals.reduce((a, b) => a + b, 0) / vals.length + 1) / 4 * 10 * WEIGHTS[g]; wsum += WEIGHTS[g];
+  }
+  return wsum ? (total / wsum).toFixed(1) : '—';
+}
+
+VIEWS['doc-eval'] = () => {
+  const qs = [...E.flags].filter(f => QUESTIONS[f]);
+  return `
+  <div class="page-head"><div><div class="eyebrow">Momento 6 · Evaluación</div><h1>Ana Pérez Gómez</h1><p class="muted">${S.reto.titulo}</p></div>
+    <div class="row"><span class="badge b-ok">● Cédula enviada</span><button class="btn btn-ghost btn-sm" onclick="go('doc-home')">← Volver</button></div></div>
+  <div class="split">
+    <div class="card">
+      <div class="entry-head"><h3>Trayectoria del pensamiento</h3><span class="small muted">Lectura sintética de la Cédula</span></div>
+      <div class="notice" style="margin:10px 0 18px">Marca los registros que quieras explorar en la Defensa Oral; se agregarán a tu guía de preguntas.</div>
+      <div class="timeline">
+        ${tlItem('propuesta', '', 'Propuesta Inicial', esc(S.b1.propuesta), 'Bloque I')}
+        ${tlItem('bit2', '', 'Bitácora · 2 interacciones con IA', S.b1.bitacora.filter(e => e.tipo === 'IA').map(e => `<div style="margin-bottom:6px">🤖 <i>"${esc(e.prompt)}"</i><br><span class="muted">→ ${esc(e.resp)}</span></div>`).join(''), 'Bloque I')}
+        ${tlItem('entrevista', 'gold', 'Diálogo con la comunidad', esc(S.b1.bitacora[2].resp) + ' <span class="badge b-ok">✔ consentimiento</span>', 'Bloque I')}
+        ${tlItem('desc0', 'gold', 'Descarte de IA', `<b>${esc(S.b2.descartes[0].que)}:</b> ${esc(S.b2.descartes[0].porque)}`, 'Bloque II')}
+        ${tlItem('error', 'red', 'Giro Cognitivo · Error', esc(S.b2.error), 'Bloque II')}
+        ${tlItem('giro', 'green', 'Giro Cognitivo · Rectificación', esc(S.b2.rect), 'Bloque II')}
+        ${tlItem('riesgo', '', 'Gestión de Riesgos', esc(S.b3.riesgos), 'Bloque III')}
+        ${tlItem('decl', 'gold', 'Declaración de Soberanía', esc(S.b4.decl), 'Bloque IV')}
+      </div>
+      <div class="row small muted" style="margin-top:4px"><span class="pasted" style="margin:0">⧉ 1 fragmento pegado</span> en la Bitácora · indicador informativo, no es una sanción.</div>
+    </div>
+    <div class="aside-sticky">
+      <div class="card">
+        <h3>Rúbrica</h3>
+        <p class="small muted">La trayectoria pesa más que el producto.</p>
+        <div class="weights"><i style="width:60%;background:var(--navy)"></i><i style="width:25%;background:var(--gold)"></i><i style="width:15%;background:var(--gold-400)"></i></div>
+        <div class="row small"><span><b style="color:var(--navy)">■</b> Trayectoria 60%</span><span><b style="color:var(--gold)">■</b> Defensa 25%</span><span><b style="color:var(--gold-400)">■</b> RFA 15%</span></div>
+        ${RUBRIC.map(r => `<div class="rubric-row"><div class="entry-head" style="margin:0"><b class="small">${r.t}</b><span class="badge ${r.g === 'Trayectoria' ? 'b-navy' : 'b-gold'}">${r.g}</span></div>
+          <p class="small muted">${r.d}</p>
+          <div class="levels">${LEVELS.map((l, i) => `<button class="${E.rubric[r.k] === i ? 'sel' : ''}" onclick="E.rubric['${r.k}']=${i};render()">${l}</button>`).join('')}</div></div>`).join('')}
+        <div class="score" style="margin-top:14px"><b>${score()}</b><span class="muted">/ 10 ${E.rubric.def === null ? '· falta Defensa Oral' : ''}</span></div>
+        <p class="small muted">Ponderación ilustrativa, por definir con la academia.</p>
+      </div>
+      <div class="card">
+        <h3>🎙️ Guía para la Defensa Oral</h3><p class="small muted">${qs.length} pregunta(s) a partir de tus marcas.</p>
+        ${qs.length ? qs.map((q, i) => `<div class="q"><b>${i + 1}.</b> ${QUESTIONS[q]}</div>`).join('') : '<p class="small muted" style="margin-top:8px">Marca registros de la trayectoria para generar preguntas.</p>'}
+      </div>
+    </div>
+  </div>`;
+};
+
+/* =========================================================
+   Login / arranque
+   ========================================================= */
+let loginRole = 'est';
+document.querySelectorAll('.role-pick button').forEach(b => b.onclick = () => {
+  loginRole = b.dataset.role;
+  document.querySelectorAll('.role-pick button').forEach(x => x.classList.toggle('sel', x === b));
+});
+$('#btnLogin').onclick = () => {
+  S.role = loginRole;
+  const doc = S.role === 'doc';
+  $('#roleTag').textContent = doc ? 'Docente' : 'Estudiante';
+  $('#userName').textContent = doc ? 'Mtro. Carlos Ruiz' : 'Ana Pérez';
+  $('#userAv').textContent = doc ? 'CR' : 'AP';
+  $('#login').classList.add('hidden'); $('#app').classList.remove('hidden');
+  go(doc ? 'doc-home' : 'est-home');
+};
+$('#btnLogout').onclick = () => { $('#app').classList.add('hidden'); $('#login').classList.remove('hidden'); };
+</script>
+</body>
+</html>

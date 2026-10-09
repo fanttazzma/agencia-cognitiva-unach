@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="es" class="no-js">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Agencia Cognitiva · Benemérita UNACH</title>
+<meta name="description" content="Portal de acceso a la Plataforma de Agencia Cognitiva de la Benemérita Universidad Autónoma de Chiapas.">
+<meta name="theme-color" content="#0B1630">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<link rel="icon" href="assets/img/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..600&family=Manrope:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="assets/css/tokens.css">
+<link rel="stylesheet" href="assets/css/site.css">
+<script src="assets/js/data.js" defer></script>
+<script src="assets/js/site.js" defer></script>
+</head>
+<body class="portal">
+<a class="skip" href="#contenido">Saltar al contenido</a>
+
+<header class="nav solid" id="nav">
+  <div class="wrap">
+    <a href="index.html" class="brand" aria-label="Agencia Cognitiva, inicio">
+      <img src="assets/img/unach-logo-light-sm.png" alt="Escudo de la Benemérita Universidad Autónoma de Chiapas" width="44" height="40">
+      <span><b>Agencia Cognitiva</b><small>Benemérita UNACH</small></span>
+    </a>
+    <nav aria-label="Principal">
+      <ul id="menu">
+        <li><a href="index.html" aria-current="page">Inicio</a></li>
+        <li><a href="#calendario-sec">Calendario</a></li>
+        <li><a href="modelo.html">Conoce el modelo</a></li>
+        <li><a href="#ayuda">Ayuda</a></li>
+      </ul>
+    </nav>
+    <button class="burger" id="burger" aria-label="Abrir menú" aria-expanded="false" aria-controls="menu"><i></i><i></i></button>
+  </div>
+</header>
+
+<main id="contenido">
+<!-- Acceso -->
+<section class="p-hero">
+  <svg class="topo" data-topo="760,360,16,1.3" viewBox="0 0 1000 800" preserveAspectRatio="xMidYMid slice" aria-hidden="true"></svg>
+  <div class="wrap p-hero-grid">
+    <div>
+      <div class="eyebrow label">Modelo Académico · Visión 2050</div>
+      <h1>Plataforma de Agencia <em>Cognitiva</em></h1>
+      <p class="p-lead">Registro y evaluación de la Cédula de Rastro Intelectual para estudiantes y docentes de la Benemérita UNACH.</p>
+      <dl class="p-facts">
+        <div><dt>Periodo</dt><dd data-periodo>Agosto – Diciembre 2026</dd></div>
+        <div><dt>Próxima fecha</dt><dd id="proxima">—</dd></div>
+        <div><dt>Servicio</dt><dd><i class="dot" aria-hidden="true"></i> <span data-status>Operando</span></dd></div>
+      </dl>
+    </div>
+
+    <div class="p-login" role="region" aria-labelledby="acc-title">
+      <h2 id="acc-title">Iniciar sesión</h2>
+      <p>Usa tu cuenta de correo institucional UNACH.</p>
+      <a href="plataforma.html" class="btn btn-gold btn-block">Continuar con cuenta UNACH <span class="arr" aria-hidden="true"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2 6h8M6.5 2.5 10 6l-3.5 3.5"/></svg></span></a>
+      <div class="secure">
+        <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1.5 2.5 3.5v4c0 3.4 2.3 5.9 5.5 7 3.2-1.1 5.5-3.6 5.5-7v-4Z"/><path d="m5.5 8 1.8 1.8L10.8 6.3"/></svg>
+        <span>Conexión cifrada. La información se resguarda en servidores de la Universidad.</span>
+      </div>
+      <div class="alt"><a href="#ayuda">¿Problemas para acceder?</a><a href="#privacidad">Aviso de privacidad</a></div>
+    </div>
+  </div>
+</section>
+
+<!-- Accesos -->
+<section class="p-sec">
+  <div class="wrap">
+    <h2 class="p-title">Accesos</h2>
+    <div class="p-cards">
+      <a href="plataforma.html" class="p-card">
+        <span class="p-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 5.5A1.5 1.5 0 0 1 5.5 4H18v16H5.5A1.5 1.5 0 0 1 4 18.5Z"/><path d="M8 8h6M8 11.5h6"/></svg></span>
+        <div><h3>Estudiantes</h3><p>Registra tu bitácora, entrega tu RFA y consulta tus fechas de defensa.</p></div>
+        <span class="p-go" aria-hidden="true">→</span>
+      </a>
+      <a href="plataforma.html" class="p-card">
+        <span class="p-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><path d="M16 9h5M16 13h5"/></svg></span>
+        <div><h3>Docentes</h3><p>Publica retos, da seguimiento a tus grupos y evalúa las cédulas enviadas.</p></div>
+        <span class="p-go" aria-hidden="true">→</span>
+      </a>
+      <a href="modelo.html" class="p-card">
+        <span class="p-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/></svg></span>
+        <div><h3>Conoce el modelo</h3><p>Guía del método de Agencia Cognitiva y de la Cédula de Rastro Intelectual.</p></div>
+        <span class="p-go" aria-hidden="true">→</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- Calendario y avisos -->
+<section class="p-sec p-sec-alt" id="calendario-sec">
+  <div class="wrap">
+    <div class="cal-grid">
+      <div>
+        <h2 class="p-title">Calendario del periodo</h2>
+        <div class="panel"><ol class="timeline" id="calendario"></ol></div>
+        <p class="p-note">Fechas generales. Cada docente puede ajustar las de su grupo.</p>
+      </div>
+      <div>
+        <h2 class="p-title">Avisos</h2>
+        <div class="panel"><ul class="news" id="avisos"></ul></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Uso responsable -->
+<section class="p-sec" id="privacidad">
+  <div class="wrap">
+    <h2 class="p-title">Uso responsable</h2>
+    <p class="p-intro">Conforme a los Lineamientos Éticos para el Uso Responsable de la IA en la Benemérita UNACH.</p>
+    <ol class="p-rules">
+      <li><h3>Declara todo uso de IA</h3><p>Registra cada interacción con herramientas de IA en tu Bitácora.</p><small>Arts. 12 y 35</small></li>
+      <li><h3>Protege los datos personales</h3><p>No incluyas datos personales en tus prompts ni uses plataformas de IA no autorizadas.</p><small>Arts. 10 y 19</small></li>
+      <li><h3>Evaluación humana</h3><p>La plataforma no califica de forma automática; toda evaluación la realiza el docente.</p><small>Arts. 7 y 33</small></li>
+    </ol>
+  </div>
+</section>
+</main>
+
+<footer id="ayuda">
+  <div class="wrap">
+    <div class="foot">
+      <div>
+        <a href="index.html" class="brand"><img src="assets/img/unach-logo-light-sm.png" alt="" width="64" height="58"><span><b>Agencia Cognitiva</b><small>Benemérita UNACH</small></span></a>
+        <p class="motto">Por la conciencia de la necesidad de servir.</p>
+      </div>
+      <div><h5>Plataforma</h5><ul><li><a href="plataforma.html">Iniciar sesión</a></li><li><a href="#calendario-sec">Calendario</a></li><li><a href="modelo.html">Conoce el modelo</a></li></ul></div>
+      <div><h5>Ayuda</h5><ul><li>Mesa de ayuda</li><li>Manual del estudiante</li><li>Manual del docente</li></ul></div>
+      <div><h5>Normatividad</h5><ul><li><a href="#privacidad">Aviso de privacidad</a></li><li>Lineamientos Éticos de IA</li><li>Modelo Académico 2050</li></ul></div>
+    </div>
+    <div class="legal">
+      <span>Benemérita Universidad Autónoma de Chiapas · Tuxtla Gutiérrez, Chiapas</span>
+      <span class="status"><i class="dot" aria-hidden="true"></i><span data-status>Operando</span> · v<span data-version>0.2</span></span>
+    </div>
+  </div>
+</footer>
+</body>
+</html>

@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg">
+  <!-- Ilustraciones de los ejes transversales. Toman los colores de la paleta activa (currentColor y variables CSS). -->
+
+  <!-- Interculturalidad: dos personas dialogan; montañas y franja textil de Chiapas -->
+  <symbol id="ilu-inter" viewBox="0 0 240 150">
+    <g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M8 124 52 74l30 32 40-50 44 54 26-30 32 44" style="stroke:var(--gold-2)"/>
+      <rect x="88" y="16" width="46" height="26" rx="12" style="fill:var(--gold-3);stroke:none"/>
+      <path d="M100 42l-6 8 14-8" style="fill:var(--gold-3);stroke:none"/>
+      <rect x="106" y="28" width="46" height="26" rx="12" style="stroke:var(--gold)"/>
+      <path d="M140 54l6 8-14-8" style="stroke:var(--gold)"/>
+      <path d="M98 29h20M116 41h24" style="stroke:var(--gold)"/>
+      <circle cx="74" cy="64" r="11"/>
+      <path d="M54 124c0-26 10-40 20-40s20 14 20 40"/>
+      <circle cx="166" cy="64" r="11"/>
+      <path d="M146 124c0-26 10-40 20-40s20 14 20 40"/>
+      <path d="M8 128h224"/>
+      <path d="M20 140l8-6 8 6-8 6zM52 140l8-6 8 6-8 6zM84 140l8-6 8 6-8 6zM116 140l8-6 8 6-8 6zM148 140l8-6 8 6-8 6zM180 140l8-6 8 6-8 6zM212 140l8-6 8 6-8 6z" style="stroke:var(--gold)"/>
+    </g>
+  </symbol>
+
+  <!-- Sustentabilidad: brote, agua, sol y vivienda con energía solar -->
+  <symbol id="ilu-sust" viewBox="0 0 240 150">
+    <g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="196" cy="32" r="14" style="fill:var(--gold-3);stroke:var(--gold)"/>
+      <path d="M196 8v-4M196 60v-4M220 32h4M168 32h4M213 15l3-3M176 52l3-3M213 49l3 3M176 12l3 3" style="stroke:var(--gold)"/>
+      <path d="M0 116c40-18 80-18 118-4s80 12 122-6" style="stroke:var(--gold-2)"/>
+      <path d="M62 128V88"/>
+      <path d="M62 104c-14 0-22-8-22-22 14 0 22 8 22 22z" style="fill:var(--gold-3)"/>
+      <path d="M62 94c0-14 8-22 22-22 0 14-8 22-22 22z"/>
+      <path d="M112 62s-13 16-13 25a13 13 0 0 0 26 0c0-9-13-25-13-25z" style="stroke:var(--gold)"/>
+      <path d="M150 128V98h48v30"/>
+      <path d="M144 100l30-24 30 24"/>
+      <path d="M160 90l14-11 14 11" style="stroke:var(--gold)"/>
+      <path d="M167 84.5h14" style="stroke:var(--gold)"/>
+      <rect x="166" y="108" width="16" height="20" rx="2"/>
+      <path d="M8 128h224"/>
+    </g>
+  </symbol>
+
+  <!-- Cultura de paz: símbolo internacional de la paz sobre la comunidad reunida -->
+  <symbol id="ilu-paz" viewBox="0 0 240 150">
+    <g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <g style="stroke:var(--gold)"><circle cx="120" cy="20" r="15" style="fill:var(--gold-3)"/><path d="M120 5v30M120 20l-10.6 10.6M120 20l10.6 10.6"/></g>
+      <circle cx="58" cy="70" r="10"/><path d="M42 102c0-14 7-20 16-20s16 6 16 20"/>
+      <circle cx="89" cy="56" r="10"/><path d="M73 88c0-14 7-20 16-20s16 6 16 20"/>
+      <circle cx="120" cy="52" r="10"/><path d="M104 84c0-14 7-20 16-20s16 6 16 20"/>
+      <circle cx="151" cy="56" r="10"/><path d="M135 88c0-14 7-20 16-20s16 6 16 20"/>
+      <circle cx="182" cy="70" r="10"/><path d="M166 102c0-14 7-20 16-20s16 6 16 20"/>
+      <ellipse cx="120" cy="110" rx="78" ry="17" style="fill:var(--gold-3)"/>
+      <path d="M62 121v14M178 121v14"/>
+      <path d="M8 138h224"/>
+    </g>
+  </symbol>
+
+  <!-- Adopción crítica de la IA: la persona revisa con lupa lo que propone el robot -->
+  <symbol id="ilu-ia" viewBox="0 0 240 150">
+    <g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M176 32V20"/>
+      <circle cx="176" cy="16" r="4" style="fill:var(--gold-3);stroke:var(--gold)"/>
+      <rect x="146" y="32" width="60" height="46" rx="10"/>
+      <circle cx="163" cy="53" r="6" style="fill:var(--gold-3)"/>
+      <circle cx="189" cy="53" r="6" style="fill:var(--gold-3)"/>
+      <path d="M165 67h22" style="stroke:var(--gold)"/>
+      <path d="M140 48v14M212 48v14"/>
+      <path d="M168 78v6M184 78v6"/>
+      <rect x="152" y="84" width="48" height="40" rx="7"/>
+      <path d="M164 96h24M164 106h14" style="stroke:var(--gold-2)"/>
+      <path d="M152 94l-12 12M200 94l12 12"/>
+      <circle cx="62" cy="58" r="12"/>
+      <path d="M38 128c0-30 10-46 24-46s24 16 24 46"/>
+      <path d="M80 98l14-10"/>
+      <circle cx="106" cy="80" r="14" style="fill:var(--paper);stroke:var(--gold)"/>
+      <path d="M100 80l4 4 8-8" style="stroke:var(--gold)"/>
+      <path d="M8 128h224"/>
+    </g>
+  </symbol>
+</svg>
